@@ -1,0 +1,50 @@
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+body {
+  font-family: Microsoft YaHei, arial, songti, sans-serif;
+  color: #333;
+}
+input,
+button {
+  outline: none;
+  border: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  background-color: transparent;
+}
+input[type="button"],
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="textarea"]:focus,
+select:focus {
+  outline-offset: 0;
+  outline-style: none;
+  outline-width: 0;
+}
+img {
+  border-width: 0;
+  line-height: 0;
+  vertical-align: middle;
+}
+a {
+  text-decoration: none;
+  font-family: Microsoft YaHei, arial, sans-serif;
+}
+html{overflow-x: hidden;}
+body, p, input, h1, h2, h3, h4, h5, h6, ul, li, dl, dt, dd, form { 
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  vertical-align: middle;
+  font-weight:normal;
+}

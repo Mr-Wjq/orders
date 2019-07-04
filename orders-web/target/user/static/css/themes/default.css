@@ -1,0 +1,22 @@
+/*
+* @Author: Marte
+* @Date:   2018-04-23 11:13:51
+* @Last Modified by:   Marte
+* @Last Modified time: 2018-04-23 17:46:19
+*/
+.kit-theme .layui-layout-admin .layui-header {
+    border-bottom: 2px solid #009688;
+    box-sizing: border-box;
+}
+.kit-theme .layui-layout-admin .layui-side{
+    background:#23262E;
+}
+/* .kit-theme .layui-layout-admin .layui-logo{
+    background:#009688 !important;
+} */
+ .kit-theme .layui-nav.layui-layout-left.kit-nav{
+    margin-left: -145px !important;
+ }
+ .layui-header{
+	background-color: #23262E;
+}

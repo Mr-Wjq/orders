@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzy.dao.SysUserMapper">
+    <resultMap id="baseResultMap" type="com.yzy.entity.SysUser">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="password_salt" jdbcType="VARCHAR" property="passwordSalt" />
+        <result column="zh_name" jdbcType="VARCHAR" property="zhName" />
+        <result column="user_photo" jdbcType="VARCHAR" property="userPhoto" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="is_final" jdbcType="INTEGER" property="isFinal" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    
+    <select id="selectUserByLoginName" resultType="com.yzy.entity.SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE status != 0 AND BINARY login_name = #{loginName}
+    </select>
+    <select id="selectUserByPhone" resultType="com.yzy.entity.SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE status != 0 AND phone = #{phone}
+    </select>
+ 
+</mapper>

@@ -1,0 +1,57 @@
+/*
+* @Author: Marte
+* @Date:   2018-04-02 11:14:17
+* @Last Modified by:   Marte
+* @Last Modified time: 2018-04-02 11:37:01
+*/
+
+.index_body .module:first-child {
+    position: absolute;
+    top: 358px;
+    left: 585px;
+}
+.index_body .module:nth-child(2) {
+    position: absolute;
+    top: 328px;
+    left: 1060px;
+}
+.index_body .module:nth-child(3) {
+    position: absolute;
+    left: 1163px;
+    top: 505px;
+}
+.index_body .module:nth-child(4) {
+    position: absolute;
+    top: 581px;
+    left: 755px;
+}
+.index_body .module:nth-child(5) {
+    position: absolute;
+    top: 697px;
+    left: 393px;
+}
+.index_body .module:nth-child(6) {
+    position: absolute;
+    top: 197px;
+    left: 300px;
+}
+.index_body .module:nth-child(7){
+    position: absolute;
+    top: 90px;
+    left: 859px;
+}
+.index_body .module:nth-child(8){
+    position: absolute;
+    top: 148px;
+    left: 1287px;
+}
+.index_body .module:nth-child(9){
+    position: absolute;
+    top: 725px;
+    left: 1299px;
+}
+.index_body .module:nth-child(10){
+    position: absolute;
+    top: 378px;
+    left: 1637px;
+}

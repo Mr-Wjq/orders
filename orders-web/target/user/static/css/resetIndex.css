@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+*{margin:0;padding:0;}
+
+html, body, h1, h2, h3, h4, h5, h6, div, dl, dt, dd, ul, ol, li, p, table, th, td, form, input, button { margin: 0; padding: 0;  }
+
+body {
+    // height: 1080px;
+    width: 1920px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    overflow: hidden;
+}
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+}
+
+input[type='button'], input[type='text'], input[type='password'], input[type='submit'] { -webkit-appearance: none; outline: none; margin: 0; }
+
+strong { font-weight: normal; }
+
+ul, li { list-style: none; }
+
+img { border: none; outline: none; }
+
+img:active { outline: none; }
+
+a, a:focus, a:hover { text-decoration: none; outline: none; }
+
+body { line-height: 1; }

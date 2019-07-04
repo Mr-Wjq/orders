@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzy.dao.SysFirstPageMapper">
+  <resultMap id="BaseResultMap" type="com.yzy.entity.SysFirstPage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="first_page_name" jdbcType="VARCHAR" property="firstPageName" />
+    <result column="first_page_path" jdbcType="VARCHAR" property="firstPagePath" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="config_details" jdbcType="VARCHAR" property="configDetails" />
+    <result column="deflag" jdbcType="VARCHAR" property="deflag" />
+  </resultMap>
+
+  <select id="selectByRoleId" parameterType="java.lang.Long"  resultMap="BaseResultMap">
+       SELECT sfp.* FROM sys_first_page sfp INNER JOIN sys_first_page_role sfpr ON sfp.id = sfpr.first_page_id
+	   WHERE sfpr.role_id = #{sysRoleId}
+  </select>
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzy.dao.BaseProductMapper" >
+  <resultMap id="BaseResultMap" type="com.yzy.entity.BaseProduct" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="base_cure_id" property="baseCureId" jdbcType="BIGINT" />
+    <result column="texture_name" property="textureName" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="selectProductVO" resultType="com.yzy.entity.vo.ProductVO">
+        SELECT 
+        bp.id
+        ,bp.product_name
+        ,bp.base_cure_id
+        ,bp.texture_name
+        ,bp.brand_name
+        ,bc.cure_name as cure_name
+        FROM base_product bp
+        INNER JOIN base_cure bc on bp.base_cure_id = bc.id
+        WHERE 1=1 AND bp.status != 0
+        <if test="cureId !=null ">
+            AND bp.base_cure_id = #{cureId}
+        </if>
+        <if test="productName !=null and productName.length() !=0">
+            AND bp.product_name LIKE CONCAT ('%/',#{productName},'%') ESCAPE '/'
+        </if>
+        <if test="textureName !=null and textureName.length() !=0">
+            AND bp.texture_name LIKE CONCAT ('%/',#{textureName},'%') ESCAPE '/'
+        </if>
+        <if test="brandName !=null and brandName.length() !=0">
+            AND bp.brand_name LIKE CONCAT ('%/',#{brandName},'%') ESCAPE '/'
+        </if>
+        order by bp.texture_name desc
+  </select>
+  
+  <select id="selectFactoryProductVO" resultType="com.yzy.entity.vo.ProductVO">
+        SELECT 
+        dpp.id
+        ,dpp.price
+        ,dpp.factory_id
+        ,su.unit_name AS factory_name
+        ,bp.product_name
+        ,bp.base_cure_id
+        ,bp.texture_name
+        ,bp.brand_name
+        ,bc.cure_name AS cure_name
+        
+        FROM base_product bp
+        INNER JOIN base_cure bc ON bp.base_cure_id = bc.id
+        INNER JOIN data_product_price dpp ON dpp.base_product_id = bp.id
+        INNER JOIN sys_unit su ON dpp.factory_id = su.id
+        WHERE 1=1
+        <if test="unitId !=null ">
+            AND dpp.factory_id=#{unitId}
+        </if>
+        <if test="cureId !=null ">
+            AND bp.base_cure_id = #{cureId}
+        </if>
+        <if test="productName !=null and productName.length() !=0">
+            AND bp.product_name LIKE CONCAT ('%/',#{productName},'%') ESCAPE '/'
+        </if>
+        <if test="textureName !=null and textureName.length() !=0">
+            AND bp.texture_name LIKE CONCAT ('%/',#{textureName},'%') ESCAPE '/'
+        </if>
+        <if test="brandName !=null and brandName.length() !=0">
+            AND bp.brand_name LIKE CONCAT ('%/',#{brandName},'%') ESCAPE '/'
+        </if>
+        <if test="factoryName !=null and factoryName.length() !=0">
+            AND su.unit_name LIKE CONCAT ('%/',#{factoryName},'%') ESCAPE '/'
+        </if>
+        AND  bp.status != 0
+        order by bp.texture_name desc
+  </select>
+  
+    <select id="selectNotAddProductVO" resultType="com.yzy.entity.vo.ProductVO">
+        SELECT 
+        bp.id
+        ,bp.product_name
+        ,bp.base_cure_id
+        ,bp.texture_name
+        ,bp.brand_name
+        ,bc.cure_name AS cure_name
+        FROM base_product bp
+        INNER JOIN base_cure bc ON bp.base_cure_id = bc.id
+        WHERE 1=1 AND bp.status != 0
+        AND bp.id NOT IN(SELECT base_product_id FROM data_product_price where factory_id=#{unitId})
+        <if test="cureId !=null ">
+            AND bp.base_cure_id = #{cureId}
+        </if>
+        <if test="productName !=null and productName.length() !=0">
+            AND bp.product_name LIKE CONCAT ('%/',#{productName},'%') ESCAPE '/'
+        </if>
+        <if test="textureName !=null and textureName.length() !=0">
+            AND bp.texture_name LIKE CONCAT ('%/',#{textureName},'%') ESCAPE '/'
+        </if>
+        <if test="brandName !=null and brandName.length() !=0">
+            AND bp.brand_name LIKE CONCAT ('%/',#{brandName},'%') ESCAPE '/'
+        </if>
+        order by bp.brand_name desc
+  </select>
+  
+</mapper>

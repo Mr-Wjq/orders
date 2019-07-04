@@ -1,0 +1,31 @@
+/*
+* @Author: Marte
+* @Date:   2018-04-02 11:10:18
+* @Last Modified by:   Marte
+* @Last Modified time: 2018-04-02 15:07:16
+*/
+.index_body .module:first-child {
+    position: absolute;
+    top: 162px;
+    left: 339px;
+}
+.index_body .module:nth-child(2) {
+    position: absolute;
+    top: 97px;
+    left: 1060px;
+}
+.index_body .module:nth-child(3) {
+    position: absolute;
+    top: 334px;
+    left: 1586px;
+}
+.index_body .module:nth-child(4) {
+    position: absolute;
+    top: 747px;
+    left: 450px;
+}
+.index_body .module:nth-child(5) {
+    position: absolute;
+    top: 734px;
+    left: 1283px;
+}

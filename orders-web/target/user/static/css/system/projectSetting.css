@@ -1,0 +1,33 @@
+.container {
+  width: 1300px;
+  margin: 0 auto;
+}
+.container .containList {
+  width: 49.5%;
+  float: left;
+}
+.container .containList .dropdown {
+  overflow: hidden;
+  height: 45px;
+}
+.container .containList .dropdown select {
+  margin-left: 20px;
+  margin-right: 5px;
+}
+.container .containList .input-group {
+  margin-bottom: 10px;
+}
+.container .containList:first-child,
+.container .containList:nth-child(3) {
+  margin-right: 1%;
+}
+.container .title {
+  width: 100%;
+  overflow: hidden;
+}
+.container .title .input-group {
+  margin-bottom: 10px;
+}
+.container .btns {
+  float: right;
+}

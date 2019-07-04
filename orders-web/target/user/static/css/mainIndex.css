@@ -1,0 +1,237 @@
+html,
+body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #020e1c;
+}
+.index_body {
+  background: url(images/body_bg.png) no-repeat;
+  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+  margin-top: -60px;
+}
+.index_body .module {
+  background: url(images/module_icon.gif) no-repeat;
+  width: 114px;
+  height: 117px;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 1s;
+  border-radius: 50%;
+  box-shadow: 3px 3px 3px #00ffff82;
+  -webkit-box-shadow: 3px 3px 3px #00ffff82;
+  -o-box-shadow: 3px 3px 3px #00ffff82;
+  -ms-box-shadow: 3px 3px 3px #00ffff82;
+  -moz-box-shadow: 3px 3px 3px #00ffff82;
+}
+.index_body .module .icon1 {
+  width: 60px;
+  height: 60px;
+  display: inline-block;
+  background: url(images/icons.png) no-repeat;
+  position: absolute;
+  top: 25px;
+  left: 24px;
+}
+.index_body .module .icon2 {
+  width: 57px;
+  height: 49px;
+  display: inline-block;
+  background: url(images/icons.png) no-repeat 0px -60px;
+  position: absolute;
+  top: 33px;
+  left: 23px;
+}
+.index_body .module .icon3 {
+  width: 57px;
+  height: 45px;
+  display: inline-block;
+  background: url(images/icons.png) no-repeat 0px -107px;
+  position: absolute;
+  top: 37px;
+  left: 23px;
+}
+.index_body .module .icon4 {
+  width: 57px;
+  height: 42px;
+  display: inline-block;
+  background: url(images/icons.png) no-repeat 0px -154px;
+  position: absolute;
+  top: 39px;
+  left: 23px;
+}
+.index_body .module .icon5 {
+  width: 57px;
+  height: 58px;
+  display: inline-block;
+  background: url(images/icons.png) no-repeat 0px -203px;
+  position: absolute;
+  top: 33px;
+  left: 23px;
+  z-index: 99;
+}
+.index_body .module .icon6 {
+  width: 57px;
+  height: 45px;
+  display: inline-block;
+  background: url(images/icons.png) no-repeat 0px -258px;
+  position: absolute;
+  top: 33px;
+  left: 23px;
+}
+.index_body .module .icon7{
+    width: 64px;
+    height: 59px;
+    display: inline-block;
+    background: url(images/icons.png) no-repeat 0px -599px;
+    position: absolute;
+    top: 29px;
+    left: 23px;
+}
+.index_body .module .icon8{
+    width: 59px;
+    height: 40px;
+    display: inline-block;
+    background: url(images/icons.png) no-repeat 0px -555px;
+    position: absolute;
+    top: 36px;
+    left: 23px;
+}
+.index_body .module .icon9{
+    width: 59px;
+    height: 40px;
+    display: inline-block;
+    background: url(images/icons.png) no-repeat 0px -511px;
+    position: absolute;
+    top: 36px;
+    left: 23px;
+  }
+.index_body .module .icon10{
+    width: 62px;
+    height: 40px;
+    display: inline-block;
+    background: url(images/icons.png) no-repeat 0px -403px;
+    position: absolute;
+    top: 36px;
+    left: 22px;
+  }
+.index_body .module .icon11{
+    width: 62px;
+    height: 58px;
+    display: inline-block;
+    background: url(images/icons.png) no-repeat 0px -452px;
+    position: absolute;
+    top: 31px;
+    left: 24px;
+}
+.index_body .module .icon12{
+    width: 62px;
+    height: 45px;
+    display: inline-block;
+    background: url(images/icons.png) no-repeat 0px -308px;
+    position: absolute;
+    top: 38px;
+    left: 24px;
+}
+.index_body .module .icon13{
+	width: 57px;
+    height: 45px;
+    display: inline-block;
+    background: url(images/icons.png) no-repeat 0px -713px;
+    position: absolute;
+    top: 38px;
+    left: 22px;
+}
+.index_body .module .icon14{
+	width: 57px;
+    height: 45px;
+    display: inline-block;
+	background: url(images/icons.png) no-repeat 0px -356px;
+	position: absolute;
+    top: 38px;
+    left: 22px;
+}
+.index_body .module .module_name {
+    width: 130px;
+    height: 41px;
+    background: url(images/文字框.png) no-repeat;
+    display: inline-block;
+    position: absolute;
+    left: -8px;
+    top: 107px;
+    line-height: 41px;
+    text-align: center;
+}
+.index_body .module .module_name span{
+    color: #fff;
+    font-size: 16px;
+}
+/* .index_body .module .module_name span>i{
+	border-top: 7px solid #efff00;
+    border-left: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 7px solid transparent;
+    position: absolute;
+    top: 18px;
+    right: 12px;
+} */
+.index_body .module .right {
+    position: absolute;
+    left: 99px;
+    top: 75px;
+}
+.index_body .module .left {
+    position: absolute;
+    left: -119px;
+    top: 75px;
+}
+.index_body .module:hover {
+    background: url(images/module_icon.png) no-repeat;
+}
+
+
+/* 点击二级菜单样式 */
+a:focus{outline:none;}
+h3{text-shadow:0 2px #ccc;}
+.tc{text-align:center;}
+.secondMenu{z-index:9999;background: url(images/module_icon.png) no-repeat;list-style-type:none;margin:0;padding:0;text-align:center;color:#fff;cursor:pointer;width:114px;height:117px;}
+.secondMenu li{position:absolute;left:13px;top:14px;border-radius:50%;-webkit-border-radius:50%;
+	width: 80px;
+    height: 80px;
+    /* background: #0008ff85; */
+    /* border: 3px solid #00dcfffa; */
+    box-sizing:border-box;
+    display: -webkit-flex;
+    align-items: center;
+    text-align: center;
+    background:url(images/db_bg.png) no-repeat;
+    background-size:100% 100%;
+}
+.secondMenu:after{position:absolute;left:0px;top:0px;width:100%;height:100%;border-radius:50%;-webkit-border-radius:50%;
+	width: 114px;
+    height: 114px;
+    background: url(images/module_icon.png) no-repeat;
+}
+.secondMenu li{transition:all .6s;-webkit-transition:all .6s;-moz-transition:.6s;}
+.secondMenu:after{content:attr(data-close);z-index:1;border-radius:50%;-webkit-border-radius:50%;}
+.secondMenu.active:after{content:attr(data-open);}
+.secondMenu a{width:80px;text-align:center;border-radius:50%;-webkit-border-radius:50%;text-decoration:none;color:#fff;font-size:0.8em;height: 80px;line-height: 80px;}
+@-webkit-keyframes scaleout {
+    0% { -webkit-transform: scale(1.0) }
+    100% {
+        -webkit-transform: scale(1.1);
+        opacity: 0;
+    }
+}
+@keyframes scaleout {
+    0% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    } 100% {
+          transform: scale(1.1);
+          -webkit-transform: scale(1.1);
+          opacity: 0;
+      }
+}

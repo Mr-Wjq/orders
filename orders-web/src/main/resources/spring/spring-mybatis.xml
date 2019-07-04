@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--配置mybatis工厂对象-->
+    <bean id="mybatisSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:spring/mybatis.xml"/>
+        <!-- <property name="mapperLocations" value="classpath:mapper/*.xml"/> -->
+        <property name="mapperLocations" >
+            <list>
+                <value>classpath:mapper/*.xml</value>
+            </list>
+        </property>
+    </bean>
+    <!-- mapper扫描器-->
+     <!-- Spring 与 Mybatis 整合配置，扫描所有 Mapper -->
+    <!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="mybatisSqlSessionFactory"/>
+        <property name="basePackage" value="com.user.dao"/>
+    </bean> -->
+     
+    <!--如果使用的是通用mapper 需要将mapper的扫描配置换成tk包下的-->
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 3.2.2版本新特性，markerInterface 可以起到 mappers 配置的作用，详细情况需要看 Marker 接口类 -->
+        <!--<property name="markerInterface" value="XXXX.mapper"/>-->
+        <property name="sqlSessionFactoryBeanName" value="mybatisSqlSessionFactory"/>
+        <property name="basePackage" value="com.yzy.dao"/>
+    </bean>
+
+</beans>

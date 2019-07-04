@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzy.dao.BaseBrandMapper">
+  <resultMap id="BaseResultMap" type="com.yzy.entity.BaseBrand">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="base_cure_id" jdbcType="BIGINT" property="baseCureId" />
+    <result column="base_texture_id" jdbcType="BIGINT" property="baseTextureId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+
+</mapper>

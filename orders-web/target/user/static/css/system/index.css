@@ -1,0 +1,98 @@
+#logout-btn {
+    height: 40px;
+    width: 60px;
+    background: #1489c2;
+    border: 0px;
+    color: #ffffff;
+    font-weight: bolder;
+}
+
+#logout-btn:hover {
+    background: #c27c4e;
+}
+
+.easyui-linkbutton :hover {
+    color: #5a60c2;
+}
+
+.easyui-linkbutton {
+    background: #ffffff;
+}
+
+.nav-list {
+    width: 100px;
+}
+.tab_container{
+	padding: 10px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    margin-bottom:1px;
+}
+.layui-inline,.layui-btn-group{
+	float:left;
+	margin-right:10px;
+}
+/* easyui样式重置 */
+.panel.datagrid{border:0px solid #ccc;}
+.datagrid-header{/* background:#595a5f !important; */ /* min-height:40px !important; */ }
+.datagrid-header span{color:#333 !important;font-size: 14px !important;}
+.datagrid-header-row{ height:40px !important; background:#f2f2f2 !important;}
+.datagrid-row-over, .datagrid-header td.datagrid-header-over{background: #d9e1ec !important;}
+.datagrid-header td:hover{background:#f2f2f2 !important;}
+.datagrid-header-inner{background:#f2f2f2 !important;}
+.datagrid-header td, .datagrid-body td, .datagrid-footer td {
+    border-color: #ccc;
+    border: 0.5px solid #e6e6e6;
+}
+.datagrid-htable, .datagrid-btable, .datagrid-ftable {
+    color: #000000;
+    border-collapse: collapse;
+}
+.datagrid-wrap{border-width:0 !important;}
+.datagrid-header, .datagrid-pager, .datagrid-footer-inner {
+    border-color: #b9b7b7;
+}
+.datagrid-pager.pagination{
+	border: 1px solid;
+    border-color: #ddd;
+    box-sizing:border-box;
+    margin-top: -1px;
+}
+
+/* layui重置 */
+.layui-body{bottom:0px !important;}
+body{
+	font: 12px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif !important;
+}
+
+/*重置combo 下拉框*/
+.textbox{
+	border-radius: 2px !important;
+}
+.textbox-focused{
+	border:none !important;
+}
+/* .textbox .textbox-text{
+	height: 38px !important;
+    line-height: 38px !important;
+    background-color: #fff !important;
+} */
+.textbox .textbox-prompt{
+	color: #333;
+}
+.combo{
+	border: 1px solid #ddd !important;
+}
+.combo-arrow{
+	background-color: #fff !important;
+	height: 36px !important;
+}
+
+.maskLayer{
+	width: 50%;
+	height: 100%; 
+	position: absolute;
+	top: 0px;
+	right: 0; 
+	display:none;
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzy.dao.SysUnitUserMapper" >
+  <resultMap id="BaseResultMap" type="com.yzy.entity.SysUnitUser" >
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sys_unit_id" jdbcType="BIGINT" property="sysUnitId" />
+    <result column="sys_user_id" jdbcType="BIGINT" property="sysUserId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <select id="selectUnitUserByUserId" parameterType="long" resultType="com.yzy.entity.SysUnitUser">
+      select *
+      from sys_unit_user
+	  where sys_user_id = #{userId}
+  </select>
+
+    <select id="selectUserAndUnit" resultType="com.yzy.entity.vo.UserUnitVO">
+      SELECT
+            sue.id AS user_id
+            ,sue.login_name
+            ,sue.zh_name
+            ,sue.phone
+            ,sue.email
+            ,sue.create_by
+            ,sue.status
+            ,sue.is_final
+            ,sue.create_time
+            ,sue.update_time
+            ,sui.id AS unit_id
+            ,sui.unit_name
+            ,sui.unit_type
+            ,sui.unit_province_id
+            ,(SELECT country FROM base_country WHERE id = sui.unit_province_id) AS unit_province
+            ,sui.unit_city_id
+	    ,(SELECT country FROM base_country WHERE id = sui.unit_city_id) AS unit_city            
+            ,sui.unit_district_id
+	    ,(SELECT country FROM base_country WHERE id = sui.unit_district_id) AS unit_district
+            ,sui.unit_address
+            ,sr.id AS role_id
+            ,sr.name AS role_name
+        FROM        sys_user sue
+        INNER JOIN  sys_user_role sur ON sue.id = sur.sys_user_id
+        INNER JOIN  sys_role sr ON sr.id = sur.sys_role_id
+        INNER JOIN  sys_unit_user suu ON sue.id = suu.sys_user_id
+        INNER JOIN  sys_unit sui ON suu.sys_unit_id = sui.id
+        WHERE 1=1 AND
+            sui.id IN
+        <foreach collection="unitIdList" index="index" item="unitId" open="(" separator="," close=")">
+            #{unitId}
+        </foreach>
+        <if test="zhName !=null and zhName.length() !=0">
+            AND sue.zh_name LIKE CONCAT ('%/',#{zhName},'%') ESCAPE '/'
+        </if>
+        <if test="loginName !=null and loginName.length() !=0">
+            AND sue.login_name LIKE CONCAT ('%/',#{loginName},'%') ESCAPE '/'
+        </if>
+        <if test="unitName !=null and unitName.length() !=0">
+            AND sui.unit_name LIKE CONCAT ('%/',#{unitName},'%') ESCAPE '/'
+        </if>
+        <if test="phone !=null and phone.length() !=0">
+            AND sue.phone LIKE CONCAT ('%/',#{phone},'%') ESCAPE '/'
+        </if>
+ 
+        <if test="roleIdList !=null and roleIdList.size() !=0">
+            AND sur.sys_role_id IN
+            <foreach collection="roleIdList" index="index" item="roleId" open="(" separator="," close=")">
+	            #{roleId}
+	        </foreach>
+        </if>
+        
+        <if test="status !=null ">
+            AND sue.status = #{status}
+        </if>
+        AND sue.status != 0
+        AND sue.id != 1      
+        ORDER BY sue.create_time desc
+    </select>
+
+</mapper>

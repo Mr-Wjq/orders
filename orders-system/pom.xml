@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.yzy</groupId>
+    <artifactId>orders-system</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>yzy</name>
+
+    <modules>
+        <module>system-parent</module>
+        <module>system-common</module>
+        <module>system-model</module>
+        <module>orders-dao</module>
+        <module>orders-service</module>
+        <module>orders-web</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <id>system</id>
+            <name>牙智云</name>
+            <email></email>
+            <timezone>+8</timezone>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+</project>
