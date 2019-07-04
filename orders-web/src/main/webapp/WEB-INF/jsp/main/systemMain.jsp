@@ -23,8 +23,9 @@
 	<ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline" lay-filter="demo">
 	  <li class="layui-nav-item layui-this"><a onclick="sm.pageSkip('page/toSystemStatistics')" href="javascriprt:void(0)">首页</a></li>
 	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">订单明细</a></li>
+	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">单位管理</a></li>
 	  <li class="layui-nav-item layui-nav-itemed">
-	    <a href="javascript:;">用户</a>
+	    <a href="javascript:;">用户管理</a>
 	    <dl class="layui-nav-child">
 	      <dd><a onclick="sm.pageSkip('page/systemUser')" href="javascript:;">管理员</a></dd>
 	      <dd><a onclick="sm.pageSkip('page/doctorUser')" href="javascript:;">医院/诊所</a></dd>
@@ -39,8 +40,9 @@
 	      <dd><a onclick="sm.pageSkip('page/toFactoryProductForDoctor')" href="javascript:;">工厂产品报价</a></dd>
 	    </dl>
 	  </li>
-	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">口扫仪管理</a></li>
-	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;"></a></li>
+	  <li class="layui-nav-item"><a onclick="sm.pageSkip('kousaoyi/toKousaoyi')" href="javascript:;">口扫仪管理</a></li>
+	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">医院/诊所来源</a></li>
+	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">优惠券管理</a></li>
 	</ul>
 </div>
 <!-- 右侧导航 -->

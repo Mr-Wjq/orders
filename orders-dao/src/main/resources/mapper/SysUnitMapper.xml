@@ -17,6 +17,8 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_final" jdbcType="INTEGER" property="isFinal" />
+    <result column="data_unit_from_id" jdbcType="BIGINT" property="dataUnitFromId" />
+    <result column="data_kousaoyi_id" jdbcType="BIGINT" property="dataKousaoyiId" />
   </resultMap>
 	
   <select id="selectUseFactory" resultMap="BaseResultMap">

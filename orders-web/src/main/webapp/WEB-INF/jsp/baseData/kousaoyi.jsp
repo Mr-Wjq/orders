@@ -13,18 +13,7 @@
     <label class="layui-form-label">模糊查询</label>
     
     <div class="layui-input-inline">
-      <select id="search_cureList">
-        <option value="">治疗类型</option>
-      </select>
-    </div>
-    <div class="layui-input-inline">
-       <input type="text" id="textureName" placeholder="材质" class="layui-input">
-    </div>
-    <div class="layui-input-inline">
-       <input type="text" id="brandName" placeholder="品牌" class="layui-input">
-    </div>
-    <div class="layui-input-inline">
-      <input type="text" id="productName" placeholder="产品名称" class="layui-input">
+       <input type="text" id="kousaoyiName" placeholder="品牌" class="layui-input">
     </div>
     
     <div class="layui-input-inline">
@@ -36,7 +25,7 @@
 </form>
 
 <!-- 数据表格 -->
-<table class="layui-hide" id="productTableId" lay-filter="productTableFilter"></table>
+<table class="layui-hide" id="kousaoyiTableId" lay-filter="kousaoyiTableFilter"></table>
 
 <script type="text/html" id="productTableToolbar">
   <div class="layui-btn-container">
@@ -47,34 +36,21 @@
 
 <script type="text/html" id="lineToolbar">
   	<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+  	<a class="layui-btn layui-btn-xs" lay-event="test">测试</a>
 </script>
 
-<div id="insertProductDiv" style="display: none;padding: 10px;" >
+<div id="insertDiv" style="display: none;padding: 10px;" >
 	<form class="layui-form" action="">
-	  	<div class="layui-form-item">
-		    <label class="layui-form-label">治疗类型<span class="required-sign">☀</span></label>
-		    <div class="layui-input-block">
-		      <select id="cureList" name="baseCureId" lay-verify="required" lay-search>
-		        <option value="">请选择治疗类型</option>
-		      </select>
-		    </div>
-		  </div>
-	  	<div class="layui-form-item">
-		    <label class="layui-form-label">材质</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="textureName" required  lay-verify="kongge" placeholder="请输入材质" autocomplete="off" class="layui-input">
-		    </div>
-	    </div>
 	  	<div class="layui-form-item">
 		    <label class="layui-form-label">品牌</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="brandName" required  lay-verify="kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
+		      <input type="text" name="kousaoyiName" required  lay-verify="kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
 		    </div>
 	    </div>
 	  	<div class="layui-form-item">
-		    <label class="layui-form-label">产品名称</label>
+		    <label class="layui-form-label">启动链接</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="productName" required  lay-verify="kongge" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
+		        <textarea name="openMethod" placeholder="请输入内容" lay-verify="kongge" class="layui-textarea"></textarea>
 		    </div>
 	    </div>
 	    <div class="layui-form-item">
@@ -86,33 +62,20 @@
 	</form>    
 </div>
 
-<div id="updateProductDiv" style="display: none;padding: 10px;" >
-	<form class="layui-form" action="" lay-filter="updateProductFilter">
+<div id="updateDiv" style="display: none;padding: 10px;" >
+	<form class="layui-form" action="" lay-filter="updateFilter">
 		<input type="hidden" name="id" />
-	  	<div class="layui-form-item">
-		    <label class="layui-form-label">治疗类型<span class="required-sign">☀</span></label>
-		    <div class="layui-input-block">
-		      <select id="u_cureList" name="baseCureId" lay-verify="required" lay-search>
-		        <option value="">请选择治疗类型</option>
-		      </select>
-		    </div>
-		  </div>
-	  	<div class="layui-form-item">
-		    <label class="layui-form-label">材质</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="textureName" required  lay-verify="kongge" placeholder="请输入材质" autocomplete="off" class="layui-input">
-		    </div>
-	    </div>
+	  	<form class="layui-form" action="">
 	  	<div class="layui-form-item">
 		    <label class="layui-form-label">品牌</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="brandName" required  lay-verify="kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
+		      <input type="text" name="kousaoyiName" required  lay-verify="kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
 		    </div>
 	    </div>
 	  	<div class="layui-form-item">
-		    <label class="layui-form-label">产品名称</label>
+		    <label class="layui-form-label">启动链接</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="productName" required  lay-verify="kongge" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
+		        <textarea name="openMethod" placeholder="请输入内容" lay-verify="kongge" class="layui-textarea"></textarea>
 		    </div>
 	    </div>
 	    <div class="layui-form-item">
@@ -124,5 +87,5 @@
 	</form> 
 </div>
 <%@ include file="/WEB-INF/jsp/system/bottom.jsp" %>
-<script type="text/javascript" src="static/js/page-js/baseData/product.js?v=<%=version %>"></script>
+<script type="text/javascript" src="static/js/page-js/baseData/kousaoyi.js?v=<%=version %>"></script>
 </body>
