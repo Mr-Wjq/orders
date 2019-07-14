@@ -57,17 +57,16 @@ public class DateUtils {
 			return df.format(new Date(time));
 		}
 	 
-	 
-	 /**转换为时间戳*/
-		public static String getStrTimeStamp(String time)throws ParseException{
-			String strTime = "";
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date date=simpleDateFormat .parse(time);
-			Long timeStemp = date.getTime();
-			strTime = timeStemp.toString();
-			strTime = strTime.substring(0, strTime.length()-3);
-			return strTime;
-		}
+	/**转换为时间戳*/
+	public static String getStrTimeStamp(String time)throws ParseException{
+		String strTime = "";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date=simpleDateFormat .parse(time);
+		Long timeStemp = date.getTime();
+		strTime = timeStemp.toString();
+		strTime = strTime.substring(0, strTime.length()-3);
+		return strTime;
+	}
 
 		/**获取一周前的时间*/
 		public static String getStrLastWeek(){
@@ -123,20 +122,24 @@ public class DateUtils {
 			return createTime;
 		}
 		
-		public String createTime(){
-			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String createTime = sdf.format(date);
-			return createTime;
-		}
 		/**
-		 * 
-		 * 获取当前时间
+		 * 获取当前时间yyyy-MM-dd HH:mm:ss
 		 */
 		public static String getCurrentTime(){
 			
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = sdf.format(date);
+			return time;
+		}
+		
+		/*
+		 *获取没有格式的当前时间 
+		 */
+		public static String getCurrentTimeNum(){
+			
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			String time = sdf.format(date);
 			return time;
 		}

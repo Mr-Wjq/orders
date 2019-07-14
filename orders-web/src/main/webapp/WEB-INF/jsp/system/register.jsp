@@ -55,7 +55,7 @@
 		<div class="layui-form-item">
 	      <label class="layui-form-label">单位名称<span class="required-sign">☀</span></label>
 	      <div class="layui-input-block">
-	        <input type="text" name="unitName" lay-verify="required|zhName" placeholder="请输入单位名称" autocomplete="off" maxlength="50" class="layui-input">
+	        <input type="text" name="unitName" lay-verify="required" placeholder="请输入单位名称" autocomplete="off" maxlength="50" class="layui-input">
 	      </div>
 	    </div>
 		<div class="layui-form-item">

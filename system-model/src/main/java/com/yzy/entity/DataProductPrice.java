@@ -1,5 +1,7 @@
 package com.yzy.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.*;
 
 @Table(name = "data_product_price")
@@ -22,7 +24,7 @@ public class DataProductPrice {
     /**
      * 价格
      */
-    private String price;
+    private BigDecimal price;
 
     /**
      * 状态0:删除/1:正常
@@ -84,7 +86,7 @@ public class DataProductPrice {
      *
      * @return price - 价格
      */
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -93,7 +95,7 @@ public class DataProductPrice {
      *
      * @param price 价格
      */
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

@@ -10,7 +10,7 @@ import com.yzy.utils.LayuiTable;
 
 @Controller
 @RequestMapping("tj")
-public class StatisticsController {
+public class StatisticsController extends BaseController{
 
 	@Autowired
 	private StatisticsService statisticsService;

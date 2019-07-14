@@ -80,23 +80,7 @@ public class PageSkipController {
 	public String toForgetPassword() {
 		return "system/forgetPassword";
 	}
-	/*
-	 * 创建订单
-	 */
-	@RequestMapping("toCreateOrders")
-	public String toCreateOrders(HttpServletRequest request,Long ordersId) {
-		Subject subject = SecurityUtils.getSubject();
-		LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");   //当前登录用户
-		SysUnit currentUnit = sysUnitMapper.selectByPrimaryKey(loginInfo.getUnitId());
-		request.setAttribute("unitName", currentUnit.getUnitName());
-		if(ordersId != null ) {
-			request.setAttribute("ordersId", ordersId);
-		}
-		return "orders/createOrders";
-	}
-	/*
-	 * 创建订单
-	 */
+
 	@RequestMapping("toFactoryProduct")
 	public String toFactoryProduct() {
 		return "baseData/factoryProduct";
@@ -133,6 +117,10 @@ public class PageSkipController {
 	@RequestMapping("toFactoryProductForDoctor")
 	public String toFactoryProductForDoctor() {
 		return "baseData/factoryProductForDoctor";
+	}
+	@RequestMapping("toFactoryProductForSystem")
+	public String toFactoryProductForSystem() {
+		return "baseData/factoryProductForSystem";
 	}
 	@RequestMapping("toSystemOrders")
 	public String toSystemOrders() {

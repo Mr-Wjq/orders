@@ -24,19 +24,54 @@
   <select id="selectUseFactory" resultMap="BaseResultMap">
        SELECT su.id FROM sys_unit su WHERE su.id IN 
        ( SELECT factory_id FROM data_unit_factory WHERE unit_id = #{unitId})
+       and su.status != 0
   </select>
   <select id="selectAllFactory" resultMap="BaseResultMap">
-        SELECT * FROM sys_unit su WHERE su.unit_type = 4
+        SELECT * FROM sys_unit su WHERE su.unit_type = 4 and su.status != 0
   </select>
   <select id="selectFactoryByProductIdAndUnitId" resultMap="BaseResultMap">
         SELECT su.id,su.unit_name FROM data_product_price dpp 
 		INNER JOIN sys_unit su ON dpp.factory_id = su.id  
 		INNER JOIN data_unit_factory  duf ON dpp.`factory_id` = duf.`factory_id`
 		WHERE dpp.base_product_id = #{productId} AND duf.unit_id = #{unitId}
+		and su.status != 0
   </select>
   <select id="selectFactoryByProductId" resultMap="BaseResultMap">
         SELECT su.id,su.unit_name FROM data_product_price dpp 
 		INNER JOIN sys_unit su ON dpp.factory_id = su.id  
 		WHERE dpp.base_product_id = #{productId}
+		and su.status != 0
+  </select>
+ 
+  <select id="selectSysUnitVO" resultType="com.yzy.entity.vo.SysUnitVO">
+   SELECT su.*
+          ,bc1.country AS unit_province 
+          ,bc2.country AS unit_city 
+          ,bc3.country AS unit_district 
+          ,duf.from_name AS from_name
+          ,duf.fuwufei AS fuwufei
+          ,dk.kousaoyi_name AS kousaoyi_name
+     FROM sys_unit su
+LEFT JOIN base_country bc1 ON su.unit_province_id = bc1.id
+LEFT JOIN base_country bc2 ON su.unit_city_id = bc2.id
+LEFT JOIN base_country bc3 ON su.unit_district_id = bc3.id
+LEFT JOIN data_unit_from duf ON su.data_unit_from_id = duf.id
+LEFT JOIN data_kousaoyi dk ON su.data_kousaoyi_id = dk.id 
+    where 1 = 1  
+	<if test="unitName !=null and unitName.length() !=0">
+            AND su.unit_name LIKE CONCAT ('%/',#{unitName},'%') ESCAPE '/'
+    </if>
+	<if test="unitType !=null">
+            AND su.unit_type = #{unitType}
+    </if>
+	<if test="unitProvinceId !=null">
+            AND su.unit_province_id = #{unitProvinceId}
+    </if>
+	<if test="unitCityId !=null">
+            AND su.unit_city_id = #{unitCityId}
+    </if>
+    AND su.status != 0
+    AND su.id != 1
+    ORDER BY su.create_time desc
   </select>
 </mapper>

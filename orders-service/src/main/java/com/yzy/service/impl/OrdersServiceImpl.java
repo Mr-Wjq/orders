@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -31,13 +33,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yzy.dao.BaseProductMapper;
 import com.yzy.dao.DataOrdersMapper;
+import com.yzy.dao.DataOrdersToothMapper;
 import com.yzy.dao.DataProductPriceMapper;
 import com.yzy.entity.BaseProduct;
 import com.yzy.entity.DataOrders;
+import com.yzy.entity.DataOrdersTooth;
 import com.yzy.entity.DataProductPrice;
 import com.yzy.entity.LoginInfo;
 import com.yzy.entity.SysUnit;
@@ -71,8 +78,89 @@ public class OrdersServiceImpl implements OrdersService {
 			logger.error("读取properties出错",e);
 		}
 	}
-
+	
 	@Autowired
+	private DataOrdersMapper dataOrdersMapper;
+	@Autowired
+	private DataOrdersToothMapper dataOrdersToothMapper;
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Result createOrders(DataOrders dataOrders, Integer baseCureId, String selectedTooths,
+			MultipartFile accessoryFile) {
+		
+		switch (baseCureId) {
+		case 2:
+			dataOrders.setOrdersNum("RE"+dataOrders.getCreateUnitId()+DateUtils.getCurrentTimeNum());
+			break;
+		case 3:
+			dataOrders.setOrdersNum("OR"+dataOrders.getCreateUnitId()+DateUtils.getCurrentTimeNum());
+			break;
+		case 4:
+			dataOrders.setOrdersNum("IM"+dataOrders.getCreateUnitId()+DateUtils.getCurrentTimeNum());
+			break;
+		}
+		
+		if(accessoryFile!=null) {
+			if(accessoryFile.getSize()>52428800) {
+				return Result.error("请上传小于50M的文件");
+			}
+			String accessoryUrl = baseFilePath+"/accessory/"+DateUtils.getForDay()+"/";
+			String accessoryName = StringUtil.getUUID()+",,"+accessoryFile.getOriginalFilename();
+			File file = new File(accessoryUrl,accessoryName);
+			//判断文件夹是否存在
+			if (file.getParentFile() != null || !file.getParentFile().isDirectory()) {
+				// 创建父文件夹
+				file.getParentFile().mkdirs();
+		    }
+			try {
+				accessoryFile.transferTo(file);
+			} catch (Exception e) {
+				logger.error("上传订单附件出错",e);
+				return Result.error("上传扫描文件出错,请稍后重试!");
+			}
+			dataOrders.setAccessoryName(accessoryName);
+			dataOrders.setAccessoryUrl(accessoryUrl);
+		}
+		try {
+			BigDecimal totalPrices = new BigDecimal(0);
+			JSONArray jsonArray = JSON.parseArray(selectedTooths);
+			Iterator<Object> it = jsonArray.iterator();
+			while (it.hasNext()) {
+		           // 遍历数组
+		           JSONObject arrayObj = (JSONObject) it.next();
+		           Integer toothNum = arrayObj.getInteger("toothNum");
+		           String toothColor = arrayObj.getString("toothColor");
+		           BigDecimal toothPrice = arrayObj.getBigDecimal("toothPrice");
+		           totalPrices = totalPrices.add(toothPrice);
+		           Long baseProductId = arrayObj.getLong("baseProductId");
+		           DataOrdersTooth dataOrdersTooth = new DataOrdersTooth();
+		           dataOrdersTooth.setOrdersNum(dataOrders.getOrdersNum());
+		           dataOrdersTooth.setToothNum(toothNum);
+		           dataOrdersTooth.setToothColor(toothColor);
+		           dataOrdersTooth.setToothPrice(toothPrice);
+		           dataOrdersTooth.setBaseProductId(baseProductId);
+		           dataOrdersToothMapper.insertSelective(dataOrdersTooth);
+		       }
+			dataOrders.setTotalPrices(totalPrices);
+			dataOrdersMapper.insertSelective(dataOrders);
+			
+		} catch (Exception e) {
+			logger.error("创建订单出错",e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			
+			String accessoryName = dataOrders.getAccessoryName();
+			String accessoryUrl = dataOrders.getAccessoryUrl();
+			File file = new File(accessoryUrl+accessoryName);
+			if(file.exists()) {
+				file.delete();
+			}
+			return Result.error("系统繁忙请稍后重试");
+		}
+		return Result.success(dataOrders.getOrdersNum());
+	}
+
+	/*@Autowired
 	private DataOrdersMapper dataOrdersMapper;
 	@Autowired
 	private BaseProductMapper baseProductMapper;
@@ -164,10 +252,10 @@ public class OrdersServiceImpl implements OrdersService {
         for (SysUnit sysUnit:unitList) {
             unitIdList.add(sysUnit.getId());
         }
-     /*   Long receiveUserId = null;
+        Long receiveUserId = null;
         if(loginInfo.getRoleId() != 4 && loginInfo.getRoleId() == 5) {
         	receiveUserId = loginInfo.getId();
-        }*/
+        }
         PageHelper.startPage(page, limit);
         List<OrdersVO> list = dataOrdersMapper.selectFactoryOrders(unitIdList, ordersNum,  patientName,null,  createUnitName, status,  createTime);
         PageInfo<OrdersVO> pageInfo = new PageInfo<>(list);   
@@ -300,7 +388,7 @@ public class OrdersServiceImpl implements OrdersService {
         			}
 			}
         }
-        /*params.put("ordersAccessory", accessoryType+" "+accessoryName);*/
+        params.put("ordersAccessory", accessoryType+" "+accessoryName);
         params.put("ordersAccessory", accessoryType);
         params.put("toothPosition1", StringUtils.isNotBlank(ordersVO.getToothPosition1()) ? ordersVO.getToothPosition1() : "");
         params.put("toothPosition2", StringUtils.isNotBlank(ordersVO.getToothPosition2()) ? ordersVO.getToothPosition2() : "");
@@ -421,6 +509,6 @@ public class OrdersServiceImpl implements OrdersService {
         PageInfo<OrdersVO> pageInfo = new PageInfo<>(list);   
  		long sum = pageInfo.getTotal();
 		return LayuiTable.success(sum, list);
-	}
+	}*/
 
 }

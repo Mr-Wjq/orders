@@ -31,7 +31,6 @@ public class DataKousaoyiServiceImpl implements DataKousaoyiService {
 
 	@Override
 	public LayuiTable select(int page, int limit, String kousaoyiName) {
-		PageHelper.startPage(page, limit);
 		Example example = new Example(DataKousaoyi.class);
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(kousaoyiName)) {
@@ -47,6 +46,7 @@ public class DataKousaoyiServiceImpl implements DataKousaoyiService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Result insert(DataKousaoyi dataKousaoyi) {
 		Example example = new Example(DataKousaoyi.class);
 		example.createCriteria().andEqualTo("kousaoyiName", dataKousaoyi.getKousaoyiName()).andNotEqualTo("status", 0);
@@ -58,12 +58,13 @@ public class DataKousaoyiServiceImpl implements DataKousaoyiService {
 			dataKousaoyiMapper.insertSelective(dataKousaoyi);
 		} catch (Exception e) {
 			logger.error("添加口扫仪失败", e);
-			Result.error();
+			return Result.error(SystemConstant.SYSTEM_ERROR);
 		}
 		return Result.success();
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public Result update(DataKousaoyi dataKousaoyi) {
 		Example example = new Example(DataKousaoyi.class);
 		example.createCriteria().andEqualTo("kousaoyiName", dataKousaoyi.getKousaoyiName())
@@ -76,8 +77,8 @@ public class DataKousaoyiServiceImpl implements DataKousaoyiService {
 		try {
 			dataKousaoyiMapper.updateByPrimaryKeySelective(dataKousaoyi);
 		} catch (Exception e) {
-			logger.error("添加口扫仪失败", e);
-			Result.error();
+			logger.error("修改口扫仪失败", e);
+			return Result.error(SystemConstant.SYSTEM_ERROR);
 		}
 		return Result.success();
 	}
@@ -96,7 +97,7 @@ public class DataKousaoyiServiceImpl implements DataKousaoyiService {
 		} catch (NumberFormatException e) {
 			logger.error("删除口扫仪失败", e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			Result.error(SystemConstant.SYSTEM_ERROR);
+			return Result.error(SystemConstant.SYSTEM_ERROR);
 		}
 		return Result.success();
 	} 

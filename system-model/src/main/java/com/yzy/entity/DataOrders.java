@@ -1,12 +1,12 @@
 package com.yzy.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "data_orders")
 public class DataOrders {
     @Id
-    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**
@@ -40,39 +40,22 @@ public class DataOrders {
     private Long receiveUserId;
 
     /**
+     * 患者id
+     */
+    @Column(name = "data_patient_id")
+    private Long dataPatientId;
+
+    /**
      * 接受时间
      */
     @Column(name = "receive_time")
     private Date receiveTime;
 
     /**
-     * 治疗类型id
-     */
-    @Column(name = "base_cure_id")
-    private Long baseCureId;
-
-    /**
-     * 材质id
-     */
-    @Column(name = "base_texture_id")
-    private Long baseTextureId;
-
-    /**
-     * 品牌id
-     */
-    @Column(name = "base_brand_id")
-    private Long baseBrandId;
-
-    /**
-     * 产品id
-     */
-    @Column(name = "base_product_id")
-    private Long baseProductId;
-
-    /**
      * 价格
      */
-    private String price;
+    private BigDecimal totalPrices;
+    private BigDecimal actualPayment;
 
     /**
      * 拒绝理由
@@ -99,50 +82,6 @@ public class DataOrders {
     private String expressNum;
 
     /**
-     * 患者
-     */
-    @Column(name = "patient_name")
-    private String patientName;
-
-    /**
-     * 患者年龄
-     */
-    @Column(name = "patient_age")
-    private Integer patientAge;
-
-    /**
-     * 患者性别1男2女
-     */
-    @Column(name = "patient_sex")
-    private Integer patientSex;
-
-    /**
-     * 患者类别1初诊2复诊
-     */
-    @Column(name = "patient_type")
-    private Integer patientType;
-
-    /**
-     * 牙位
-     */
-    @Column(name = "tooth_position1")
-    private String toothPosition1;
-    
-    @Column(name = "tooth_position2")
-    private String toothPosition2;
-    
-    @Column(name = "tooth_position3")
-    private String toothPosition3;
-    
-    @Column(name = "tooth_position4")
-    private String toothPosition4;
-
-    /**
-     * 颜色
-     */
-    private String color;
-
-    /**
      * 订单附件:1扫描数据2颌架3咬蜡4托盘5照片6旧牙7参考摸8比色板
      */
     @Column(name = "orders_accessory")
@@ -164,6 +103,7 @@ public class DataOrders {
      * 状态：0删除1未发布2待接单3已拒绝4已接收5生产中6已发货7订单完成
      */
     private Integer status;
+    private Integer payStatus;
 
     /**
      * 创建时间
@@ -293,6 +233,24 @@ public class DataOrders {
     }
 
     /**
+     * 获取患者id
+     *
+     * @return data_cases_id - 患者id
+     */
+    public Long getDataPatientId() {
+        return dataPatientId;
+    }
+
+    /**
+     * 设置患者id
+     *
+     * @param dataCasesId 患者id
+     */
+    public void setDataPatientId(Long dataPatientId) {
+        this.dataPatientId = dataPatientId;
+    }
+
+    /**
      * 获取接受时间
      *
      * @return receive_time - 接受时间
@@ -311,96 +269,31 @@ public class DataOrders {
     }
 
     /**
-     * 获取治疗类型id
+     * 获取实际支付
      *
-     * @return base_cure_id - 治疗类型id
      */
-    public Long getBaseCureId() {
-        return baseCureId;
+    public BigDecimal getActualPayment() {
+        return actualPayment;
     }
 
     /**
-     * 设置治疗类型id
+     * 设置实际支付
      *
-     * @param baseCureId 治疗类型id
+     * @param actualPayment 实际支付
      */
-    public void setBaseCureId(Long baseCureId) {
-        this.baseCureId = baseCureId;
+    public void setActualPayment(BigDecimal actualPayment) {
+        this.actualPayment = actualPayment;
     }
 
-    /**
-     * 获取材质id
-     *
-     * @return base_texture_id - 材质id
-     */
-    public Long getBaseTextureId() {
-        return baseTextureId;
-    }
+    public BigDecimal getTotalPrices() {
+		return totalPrices;
+	}
 
-    /**
-     * 设置材质id
-     *
-     * @param baseTextureId 材质id
-     */
-    public void setBaseTextureId(Long baseTextureId) {
-        this.baseTextureId = baseTextureId;
-    }
+	public void setTotalPrices(BigDecimal totalPrices) {
+		this.totalPrices = totalPrices;
+	}
 
-    /**
-     * 获取品牌id
-     *
-     * @return base_brand_id - 品牌id
-     */
-    public Long getBaseBrandId() {
-        return baseBrandId;
-    }
-
-    /**
-     * 设置品牌id
-     *
-     * @param baseBrandId 品牌id
-     */
-    public void setBaseBrandId(Long baseBrandId) {
-        this.baseBrandId = baseBrandId;
-    }
-
-    /**
-     * 获取产品id
-     *
-     * @return base_product_id - 产品id
-     */
-    public Long getBaseProductId() {
-        return baseProductId;
-    }
-
-    /**
-     * 设置产品id
-     *
-     * @param baseProductId 产品id
-     */
-    public void setBaseProductId(Long baseProductId) {
-        this.baseProductId = baseProductId;
-    }
-
-    /**
-     * 获取价格
-     *
-     * @return price - 价格
-     */
-    public String getPrice() {
-        return price;
-    }
-
-    /**
-     * 设置价格
-     *
-     * @param price 价格
-     */
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    /**
+	/**
      * 获取拒绝理由
      *
      * @return refuse_reason - 拒绝理由
@@ -470,129 +363,6 @@ public class DataOrders {
      */
     public void setExpressNum(String expressNum) {
         this.expressNum = expressNum;
-    }
-
-    /**
-     * 获取患者
-     *
-     * @return patient_name - 患者
-     */
-    public String getPatientName() {
-        return patientName;
-    }
-
-    /**
-     * 设置患者
-     *
-     * @param patientName 患者
-     */
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
-    }
-
-    /**
-     * 获取患者年龄
-     *
-     * @return patient_age - 患者年龄
-     */
-    public Integer getPatientAge() {
-        return patientAge;
-    }
-
-    /**
-     * 设置患者年龄
-     *
-     * @param patientAge 患者年龄
-     */
-    public void setPatientAge(Integer patientAge) {
-        this.patientAge = patientAge;
-    }
-
-    /**
-     * 获取患者性别1男2女
-     *
-     * @return patient_sex - 患者性别1男2女
-     */
-    public Integer getPatientSex() {
-        return patientSex;
-    }
-
-    /**
-     * 设置患者性别1男2女
-     *
-     * @param patientSex 患者性别1男2女
-     */
-    public void setPatientSex(Integer patientSex) {
-        this.patientSex = patientSex;
-    }
-
-    /**
-     * 获取患者类别1初诊2复诊
-     *
-     * @return patient_type - 患者类别1初诊2复诊
-     */
-    public Integer getPatientType() {
-        return patientType;
-    }
-
-    /**
-     * 设置患者类别1初诊2复诊
-     *
-     * @param patientType 患者类别1初诊2复诊
-     */
-    public void setPatientType(Integer patientType) {
-        this.patientType = patientType;
-    }
-
-
-    public String getToothPosition1() {
-		return toothPosition1;
-	}
-
-	public void setToothPosition1(String toothPosition1) {
-		this.toothPosition1 = toothPosition1;
-	}
-
-	public String getToothPosition2() {
-		return toothPosition2;
-	}
-
-	public void setToothPosition2(String toothPosition2) {
-		this.toothPosition2 = toothPosition2;
-	}
-
-	public String getToothPosition3() {
-		return toothPosition3;
-	}
-
-	public void setToothPosition3(String toothPosition3) {
-		this.toothPosition3 = toothPosition3;
-	}
-
-	public String getToothPosition4() {
-		return toothPosition4;
-	}
-
-	public void setToothPosition4(String toothPosition4) {
-		this.toothPosition4 = toothPosition4;
-	}
-
-	/**
-     * 获取颜色
-     *
-     * @return color - 颜色
-     */
-    public String getColor() {
-        return color;
-    }
-
-    /**
-     * 设置颜色
-     *
-     * @param color 颜色
-     */
-    public void setColor(String color) {
-        this.color = color;
     }
 
     /**
@@ -738,4 +508,13 @@ public class DataOrders {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
+	public Integer getPayStatus() {
+		return payStatus;
+	}
+
+	public void setPayStatus(Integer payStatus) {
+		this.payStatus = payStatus;
+	}
+    
 }

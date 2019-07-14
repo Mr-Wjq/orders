@@ -1,20 +1,4 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="utf-8" %>
-<style type="text/css">
-.footer {
-	width:100%;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    height: 44px;
-    line-height: 44px;
-    padding: 0 15px;
-    background-color: #eee;
-    text-align: center;
-}
-</style>
-<div class="footer" >
-	<p>北京牙智云易科技有限公司</p>
-</div>
 <script type="text/javascript" src="static/js/layui/layui.all.js"></script>
 <script type="text/javascript">
 var form;
@@ -35,6 +19,11 @@ layui.use(['table','laydate'], function(){
 		    return '请输入2-16个中文、字母或数字';
 		  }
 		}
+		,unitName: function(value){
+			  if(!(/^[a-zA-Z0-9\u4e00-\u9fa5]{2,50}$/.test(value))){
+			    return '请输入2-50个中文、字母或数字';
+			  }
+			}
 		,age: [
 	    	/^(?:[1-9][0-9]?|1[01][0-9]|120)$/ 
 	        ,'请输入正确的年龄'
@@ -65,6 +54,10 @@ layui.use(['table','laydate'], function(){
 	      		return '不能有空格';
 	      	}
 	      }
+	    ,money:[
+	    	/^(([1-9]\d*)|\d)(\.\d{1,2})?$/
+	    	,'请输入正确金额,保留小数点后两位'
+	    ]
 	  });
 })
 </script>

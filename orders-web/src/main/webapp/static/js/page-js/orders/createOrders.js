@@ -1,99 +1,150 @@
-layui.use(['transfer','table','laydate'], function(){
-  var table = layui.table;
-  var laydate = layui.laydate;
-  var form = layui.form;
-  var transfer = layui.transfer
-
-  //监听下拉框
-	form.on('select(threeDivBaseCureId)', function(obj){
-		if(obj.value !=null && obj.value != '' && obj.value != undefined){
-			selectProductTexture(obj.value,form)
-		}else{
-			$("#baseProductId").empty();
-			$("#baseProductId").append("<option value=''>暂无产品材质</option>");
-			form.render();
-		}
+/*已选中的牙齿数组*/
+var selectedToothArr = [];
+/*layui表格*/
+var tableIns;
+$(function(){
+    var li = $('.tooth_choose ul li');
+    li.click(function(){
+        var tooth = $(this).find('span.icon');
+        var currToothNum = tooth.html();
+		var lastToothNum = $("#toothNum").val();
 		
-	});
-	form.on('select(threeDivBaseProductId)', function(obj){
-		if(obj.value !=null && obj.value != '' && obj.value != undefined){
-			selectFactoryByProductId(obj.value,form)
+		//选中牙齿时先判断上一个牙齿有没有被选中
+		if(lastToothNum!=null && lastToothNum!='' && lastToothNum!=undefined){
+			var flag = false;
+			var flag2 = false;
+			var updateTooth = '';
+ 			for (var i = 0; i < selectedToothArr.length; i++) {
+ 				var data = selectedToothArr[i];
+ 				if(data.toothNum == lastToothNum){
+ 					flag = true;
+ 				}
+ 				if(data.toothNum == currToothNum){
+ 					updateTooth = data;
+ 					flag2 = true;
+ 				}
+ 			}
+			if(!flag){
+				$(".tooth"+lastToothNum).removeClass('icon_active');
+			}			
+			if(flag2){
+ 				$("#toothNum").val(currToothNum);
+				$("#toothNumShow").html(currToothNum);
+				$("#toothColor").val(updateTooth.toothColor);
+				form.render();
+ 			}else{
+				if(lastToothNum == currToothNum){
+ 					$("#toothNum").val('');
+ 					$("#toothNumShow").html('');
+ 					remove_active(tooth);
+ 				}else{
+ 					add_active(tooth);
+ 					$("#toothNum").val(currToothNum);
+ 					$("#toothNumShow").html(currToothNum);
+ 				}
+			}		
 		}else{
-			$("#receiveUnitId").empty();
-			$("#receiveUnitId").append("<option value=''>暂无加工厂</option>");
+			add_active(tooth);
+			$("#toothNum").val(currToothNum);
+			$("#toothNumShow").html(currToothNum);
 		}
-		form.render();
-	}); 
-	form.on('checkbox(ordersAccessory)', function(data){
-		  
-		if(data.elem.checked == true && data.value == 1){
-			  $("#accessoryTr").append("<td class='cols-font' >扫描文件</td><td colspan='3' >" +
-			  		"<button class='layui-btn' type='button' onclick=\"$('#uploadFile').val('');$('#uploadFile').click();\">" +
-			  	    "<i class='layui-icon'>&#xe62d;</i>上传扫描文件</button>"+
-        	        "<input id='uploadFile' type='file'  style='display:none;position: fixed;bottom: 30px;right: 60px;z-index: 999999;'"+
-					"onchange=\"$('#showFileName').html(this.value);\" multiple><span style='margin-left:20px;' id='showFileName'></span></td>");
-			  $("#kousaoDiv").append('<a class="layui-btn layui-btn-sm" href="runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=0">打开口扫仪</a>')
-		 };
-		 if(data.elem.checked == false && data.value == 1){
-			  $("#accessoryTr").empty();
-			  $("#kousaoDiv").empty();
-		 };
-	}); 
-  $("#useFactory").click(function(){
-	  layer.open({
-  		type:1
-  		,title:'设置常用工厂'
-  		,area:['50%','70%']
-  		,shade:0.8
-  		,btn:['关闭']
-  		,content:$("#userFactoryDiv")
-  		,yes:function(){
-  			layer.closeAll();
-  		}
-  		,success:function(){
-  			transferMethod(transfer);
-  		}
-  		,end:function(){
-  			$("#userFactoryDiv").hide();
-  		}
-  	})
-  })
-  form.on('submit(createOrders)', function(data){
-	  createOrders();
-	  return false;
-  });
-  form.on('submit(updateOrders)', function(data){
-	  updateOrders();
-	  return false;
-  });
-  getBaseCure(form);
-  
-  var ordersId = $("#ordersId").val();
-  if(ordersId != '' && ordersId!=null && ordersId !=undefined ){
-	  huixianUpdateOrders(form,ordersId);
-  }
-})
+    })
+    /*,function(){
+    	$("#toothNum").val('');
+		$("#toothNumShow").html('');
+		remove_active(tooth);
+    	var tooth = $(this).find('span.icon');
+        var currToothNum = tooth.html();
+ 		var lastToothNum = $("#toothNum").val();
+ 		//选中牙齿时先判断上一个牙齿有没有被选中
+ 		if(lastToothNum!=null && lastToothNum!='' && lastToothNum!=undefined){
+ 			var flag = false;
+ 			var flag2 = false;
+ 			var updateTooth = '';
+ 			for (var i = 0; i < selectedToothArr.length; i++) {
+ 				var data = selectedToothArr[i];
+ 				if(data.toothNum == lastToothNum){
+ 					flag = true;
+ 				}
+ 				if(data.toothNum == currToothNum){
+ 					updateTooth = data;
+ 					flag2 = true;
+ 				}
+ 			}
+ 			if(!flag){
+ 				$(".tooth"+lastToothNum).removeClass('icon_active');
+ 			}			
+ 			if(flag2){
+ 				$("#toothNum").val(currToothNum);
+				$("#toothNumShow").html(currToothNum);
+				$("#toothColor").val(updateTooth.toothColor);
+				form.render();
+ 			}else{
+				if(lastToothNum == currToothNum){
+ 					$("#toothNum").val('');
+ 					$("#toothNumShow").html('');
+ 					remove_active(tooth);
+ 				}else{
+ 					add_active(tooth);
+ 					$("#toothNum").val(currToothNum);
+ 					$("#toothNumShow").html(currToothNum);
+ 				}
+			}		
+ 		}else{
+ 			add_active(tooth);
+ 			$("#toothNum").val(currToothNum);
+ 			$("#toothNumShow").html(currToothNum);
+ 		}
+	});*/
 
+    $('#clearAll').click(function(){
+    	layer.confirm('全部清除会清除掉保存的牙齿,是否继续?', {icon: 3, title:'提示'}, function(index){
+    	   initPage();
+		   layer.close(index);
+		});
+    	
+    });
+    
+    $('#saveTooth').click(function(){
+    	saveTooth();
+    });
+    $('#createOrders').click(function(){
+    	createOrders();
+    });
+    patientMes();
+    selectUnitFactory();
+    clock();
+})
+/*创建订单*/
 function createOrders(){
 	var formData = new FormData();
-	formData.append("patientName",$("#patientName").val());
-	formData.append("patientAge",$("#patientAge").val());
-	formData.append("patientSex",$("input[name='patientSex']:checked").val());
-	formData.append("patientType",$("input[name='patientType']:checked").val());
+	
+	var patientId = $("#patientId").val();
+	if(patientId=='' || patientId == undefined || patientId == null){
+		layer.msg('未找到患者信息');
+		return false;
+	}
+	formData.append("dataPatientId",patientId);
+	formData.append("baseCureId",$("#baseCureId").val());
+	if(selectedToothArr.length<1){
+		layer.msg('请添加牙齿');
+		return false;
+	}
+	var selectedTooths = JSON.stringify(selectedToothArr);
+	formData.append("selectedTooths",selectedTooths);
+	
 	var ordersAccessory = '';
 	$.each($('input[name="ordersAccessory"]:checkbox:checked'),function(){
 		ordersAccessory += $(this).val() + ",";
     });
-    ordersAccessory = ordersAccessory.substring(0,ordersAccessory.length-1);
-    
-	/*var ordersAccessory = $("input[name='ordersAccessory']:checked").val();*/
 	if(ordersAccessory == ''){
 		layer.msg('请选择订单附件') 
 		return false;
 	} 
-	formData.append("ordersAccessory",ordersAccessory);
-	
-	var fileName = $("#uploadFile").val();
+    ordersAccessory = ordersAccessory.substring(0,ordersAccessory.length-1);
+    formData.append("ordersAccessory",ordersAccessory);
+    
+    var fileName = $("#uploadFile").val();
 	if(fileName!='' && fileName !=null && fileName!=undefined){
 		var myfile = $("#uploadFile")[0].files[0];
 		if(myfile.size>52428800){
@@ -102,14 +153,12 @@ function createOrders(){
 	    }
 		formData.append("accessoryFile",$("#uploadFile")[0].files[0]);
 	}
-	formData.append("toothPosition1",$("#toothPosition1").val());
-	formData.append("toothPosition2",$("#toothPosition2").val());
-	formData.append("toothPosition3",$("#toothPosition3").val());
-	formData.append("toothPosition4",$("#toothPosition4").val());
-	formData.append("color",$("#color").val());
-	formData.append("baseCureId",$("#baseCureId").val());
-	formData.append("baseProductId",$("#baseProductId").val());
-	formData.append("receiveUnitId",$("#receiveUnitId").val());
+	var factoryId = $("#factoryId").val();
+	if(factoryId=='' || factoryId == undefined || factoryId == null){
+		layer.msg('请选择工厂');
+		return false;
+	}
+	formData.append("receiveUnitId",factoryId);
 	formData.append("remarks",$("#remarks").val());
 	$.ajax({
 		url:'orders/createOrders'
@@ -121,255 +170,305 @@ function createOrders(){
 	    ,dataType:"json"
 	    ,success:function(result){
 	    	if(10000 == result.code){
-	    		layer.msg("订单创建成功,并已下发到指定工厂", {icon: 1,time:2000},function(){
-	    			location.href = "page/toDoctorOrders";
-				});
+	    		
 			}else{
 				layer.msg(result.msg);
 			}
 	    }
 	})
 }
-function updateOrders(){
-	var formData = new FormData();
-	formData.append("ordersId",$("#ordersId").val());
-	formData.append("patientName",$("#patientName").val());
-	formData.append("patientAge",$("#patientAge").val());
-	formData.append("patientSex",$("input[name='patientSex']:checked").val());
-	formData.append("patientType",$("input[name='patientType']:checked").val());
-	var ordersAccessory = '';
-	$.each($('input[name="ordersAccessory"]:checkbox:checked'),function(){
-		ordersAccessory += $(this).val() + ",";
-    });
-    ordersAccessory = ordersAccessory.substring(0,ordersAccessory.length-1);
-    
-	/*var ordersAccessory = $("input[name='ordersAccessory']:checked").val();*/
-	if(ordersAccessory == ''){
-		layer.msg('请选择订单附件') 
+/*保存单个牙齿*/
+function saveTooth(){
+	var patientMes = $("#patientMes").val();
+	if(patientMes=='' || patientMes==undefined || patientMes==null){
+		layer.msg('请选择患者');
 		return false;
-	} 
-	formData.append("ordersAccessory",ordersAccessory);
+	}
+
+	var toothNum = $("#toothNum").val();
+	if(toothNum=='' || toothNum==undefined || toothNum==null){
+		layer.msg('牙齿编号不能为空');
+		return false;
+	}
+	var toothColor = $("#toothColor").val();
+	if(toothColor=='' || toothColor==undefined || toothColor==null){
+		layer.msg('色号不能为空');
+		return false;
+	}
+	var rows = table.checkStatus('baseProductTable');
+	if(rows.data.length < 1){
+		layer.msg('请选择产品材质');
+		return false;
+	}
+	var rowData = rows.data[0]
+	var baseProductId = rowData.baseProductId;
 	
-	var fileName = $("#uploadFile").val();
-	if(fileName!='' && fileName !=null && fileName!=undefined){
-		var myfile = $("#uploadFile")[0].files[0];
-		if(myfile.size>52428800){
-	        layer.msg("请上传小于50M的文件");
-	        return false;
-	    }
-		formData.append("accessoryFile",$("#uploadFile")[0].files[0]);
+	var baseProductName = '';
+	if(rowData.textureName!='' && rowData.textureName != null && rowData.textureName!=undefined){
+		baseProductName = rowData.textureName;
 	}
-	formData.append("toothPosition1",$("#toothPosition1").val());
-	formData.append("toothPosition2",$("#toothPosition2").val());
-	formData.append("toothPosition3",$("#toothPosition3").val());
-	formData.append("toothPosition4",$("#toothPosition4").val());
-	formData.append("color",$("#color").val());
-	formData.append("baseCureId",$("#baseCureId").val());
-	formData.append("baseProductId",$("#baseProductId").val());
-	formData.append("receiveUnitId",$("#receiveUnitId").val());
-	formData.append("remarks",$("#remarks").val());
-	$.ajax({
-		url:'orders/updateOrders'
-		,type:'post'
-		,cache: false//上传文件无需缓存
-        ,processData: false//用于对data参数进行序列化处理 这里必须false
-        ,contentType: false //必须
-		,data:formData
-	    ,dataType:"json"
-	    ,success:function(result){
-	    	if(10000 == result.code){
-	    		layer.msg("操作成功",{time:1000},function(){
-	    			parent.layer.closeAll();
-	    		});
-			}else{
-				layer.msg(result.msg);
-			}
-	    }
-	})
-}
-function transferMethod(transfer){
-	$.ajax({
-  		  url:'unit/selectUserFactory'
-  		  ,type:'get'
-  		  ,dataType:'json'
-  		  ,async:false
-  		  ,success:function(data){
-  			if(data!=null && data!='' && data!=undefined){
-  				var allFactory = data.allFactory;
-  				var useFactory = data.useFactory;
-  				var arr=new Array();
-  				for (var i = 0; i < useFactory.length; i++) {
-  					arr[i] = useFactory[i].id
-				}
-  				transfer.render({
-				    elem: '#factoryList'
-				    ,id: 'factoryFansfer' //定义唯一索引
-				    ,title: ['所有工厂', '常用工厂']
-				    ,showSearch: true
-				    ,data:allFactory
-				    ,value:arr
-				    ,parseData: function(res){
-				        return {
-				          "value": res.id //数据值
-				          ,"title": res.unitName //数据标题
-				          //,"disabled": res.disabled  //是否禁用
-				          //,"checked": res.checked //是否选中
-				        }
-				     }
-				    ,onchange: function(obj, index){
-				        var type = index == 0 ? 'insert' : 'delete' ;
-				        var factoryId ='';
-				        for (var i = 0; i < obj.length; i++) {
-							var row = obj[i];
-							if((i+1)==obj.length){
-								factoryId += row.value;
-							}else{
-								factoryId += row.value + ",";
-							}
-						}
-				        $.ajax({
-				  	  		  url:'unit/updateUserFactory'
-				  	  		  ,type:'post'
-				  	  		  ,data:{type:type,factoryId:factoryId}
-				  	  		  ,dataType:'json'
-				  	  		  ,async:false
-				  	  		  ,success:function(result){
-				  	  			 if(result.code != 10000){
-				  	  				 layer.msg(result.msg);
-				  	  			 }
-				  	  			transferMethod(transfer)
-				  	  		  }
-				  	  	})
-				    }
-			    })
-			}
-  		  }
-  	  })
-}
-function getBaseCure(form){
-	$.ajax({
-  		  url:'baseData/selectAllCureList'
-  		  ,type:'get'
-  		  ,dataType:'json'
-  		  ,success:function(data){
-  			if(data!=null && data!='' && data!=undefined){
-  				$("#baseCureId").empty();
-  				$("#baseCureId").append("<option value=''>请选择治疗类型</option>");
-				for (var i = 0; i < data.length; i++) {
-					$("#baseCureId").append('<option value="'+data[i].id+'">'+data[i].cureName+'</option>');						
-				}
-				form.render();
-			}
-  		  }
-  	  })
-}
-function selectProductTexture(baseCureId,form,productId){
-	if(baseCureId==null || baseCureId == '' || baseCureId == undefined){
-		return false;
-	}
-	$.ajax({
-		url:'baseData/selectProductTexture'
-		,type:'get'
-		,data:{baseCureId:baseCureId}
-		,dataType:'json'
-		,success:function(data){
-			if(data!=null && data!='' && data!=undefined){
-				$("#baseProductId").empty();
-				$("#baseProductId").append("<option value=''>请选择产品材质</option>");
-				for (var i = 0; i < data.length; i++) {
-					if(productId!=null && productId!='' && productId!=undefined && productId == data[i].id){
-						$("#baseProductId").append('<option value="'+data[i].id+'" selected>'+data[i].name+'</option>');						
-					}else{
-						$("#baseProductId").append('<option value="'+data[i].id+'">'+data[i].name+'</option>');						
-
-					}
-				}
-				form.render();
-			}
+	if(rowData.brandName!='' && rowData.brandName != null && rowData.brandName!=undefined){
+		if(baseProductName!=''){
+			baseProductName +='-' + rowData.brandName;  
+		}else{
+			baseProductName = rowData.brandName;
 		}
-	})
+	}
+	
+	if(selectedToothArr.length==0){
+		var row = {};
+		row.toothNum = toothNum;
+		row.toothColor = toothColor;
+		row.baseProductId = baseProductId;
+		row.toothPrice = rowData.productPrice;
+		row.baseProductName = baseProductName;
+		selectedToothArr.push(row)
+	}
+	var flag = false;
+	for (var i = 0; i < selectedToothArr.length; i++) {
+        if(selectedToothArr[i].toothNum == toothNum){
+        	selectedToothArr[i].toothNum = toothNum;
+        	selectedToothArr[i].toothColor = toothColor;
+        	selectedToothArr[i].baseProductId = baseProductId;
+        	selectedToothArr[i].toothPrice = rowData.productPrice;
+        	selectedToothArr[i].baseProductName = baseProductName;
+        	flag = true;
+        }
+    }
+	if(!flag){
+		var row = {};
+		row.toothNum = toothNum;
+		row.toothColor = toothColor;
+		row.baseProductId = baseProductId;
+		row.toothPrice = rowData.productPrice;
+		row.baseProductName = baseProductName;
+		selectedToothArr.push(row)
+	}
+	$("#selectedToothTable").empty();
+	for (var i = 0; i < selectedToothArr.length; i++) {
+		var data = selectedToothArr[i];
+        
+		$("#selectedToothTable").append('<tr>'+
+        		'<th>'+data.toothNum+'</th>'+
+        		'<th>'+data.toothColor+'</th>'+
+        		'<th>'+data.baseProductName+'</th>'+
+        		'<th>'+data.toothPrice+'</th>'+
+        		'<th><button type="button" onclick="deleteSelectedTooth('+data.toothNum+')" class="layui-btn layui-btn-xs">删除</button></th></tr>');
+    }
 }
-
-function selectFactoryByProductId(productId,form,receiveFactoryId){
+/*删除已经保存的牙齿*/
+function deleteSelectedTooth(toothNum){
+	var index;
+	for (var i = 0; i < selectedToothArr.length; i++) {
+        if(selectedToothArr[i].toothNum == toothNum){
+        	index = i;
+        }
+    }
+	if(index != undefined){
+		selectedToothArr.splice(index, 1);
+		$(".tooth"+toothNum).removeClass('icon_active');
+		var curr = $("#toothNum").val();
+		if(curr == toothNum){
+			$("#toothNum").val('');
+			$("#toothNumShow").html('');
+	     }
+	}
+	$("#selectedToothTable").empty();
+	for (var i = 0; i < selectedToothArr.length; i++) {
+		var data = selectedToothArr[i];
+        $("#selectedToothTable").append('<tr>'+
+        		'<th>'+data.toothNum+'</th>'+
+        		'<th>'+data.toothColor+'</th>'+
+        		'<th>'+data.baseProductName+'</th>'+
+        		'<th><button type="button" onclick="deleteSelectedTooth('+data.toothNum+')" class="layui-btn layui-btn-xs">删除</button></th></tr>');
+    }
+}
+/*获取单位自己的加工厂*/
+function selectUnitFactory(){
 	$.ajax({
-		url:'unit/selectFactoryByProductId'
+		url:'unit/selectMyFactory'
 		,type:'get'
-		,data:{productId:productId}
 		,dataType:'json'
 		,async:false
 		,success:function(data){
+			$("#factoryId").empty();
 			if(data!=null && data!='' && data!=undefined){
-				$("#receiveUnitId").empty();
-				$("#receiveUnitId").append("<option value=''>请选择加工厂</option>");
 				for (var i = 0; i < data.length; i++) {
-					if(receiveFactoryId!=null && receiveFactoryId!='' && receiveFactoryId!=undefined && receiveFactoryId == data[i].id){
-						$("#receiveUnitId").append('<option value="'+data[i].id+'" selected>'+data[i].unitName+'</option>');						
-					}else{
-						$("#receiveUnitId").append('<option value="'+data[i].id+'">'+data[i].unitName+'</option>');						
-					}
+					$("#factoryId").append('<option value="'+data[i].id+'">'+data[i].unitName+'</option>');						
 				}
 			}else{
-				$("#receiveUnitId").empty();
-				$("#receiveUnitId").append("<option value=''>暂无加工厂</option>");
+				$("#factoryId").append("<option value=''>未找到跟您合作的加工厂,请联系管理员</option>");
 			}
 			form.render();
 		}
 	})
 }
-function huixianUpdateOrders(form,ordersId){
+/*获取产品材质*/
+var tableIns;
+function selectProductTexture(baseCureId){
+	if(baseCureId==null || baseCureId == '' || baseCureId == undefined){
+		return false;
+	}
+  tableIns = table.render({
+	    elem: '#baseProductTable'
+	    ,url:'baseData/selectOrdersProductVO'
+	    ,headers:{
+	    	"X-Csrf-Token":csrf_token
+	    }
+  		,where:{
+  			baseCureId:baseCureId
+  		}
+  		,height:400
+		,response: {
+		    statusName: 'code'
+		    ,statusCode: 200
+		    ,msgName: 'msg'
+		    ,countName: 'total'
+		    ,dataName: 'rows'
+		 } 
+	    ,title: '数据表'
+	    ,cols: [[
+	    	{type:'radio'}
+	      ,{field:'textureName', title:'材质' }
+	      ,{field:'brandName', title:'品牌' }
+	      ,{field:'productPrice', title:'价格' }
+	      ,{field:'yh', title:'优惠' ,templet:function(row){
+	     	 if(row.num != '' && row.num != undefined && row.num != null){
+	    		 return '<span style="color:red">您有'+row.discountPrice+"元优惠券待使用";
+	    	 }else{
+	    		 return '';
+	    	 }
+	      }}
+	    ]]
+	  });
+}
+/*获取患者信息*/
+function patientMes(){
 	$.ajax({
-		url:'orders/selectOrdersById'
+		url:'patient/selectPatientByCurrUnitId'
 		,type:'get'
-		,data:{ordersId:ordersId}
 		,dataType:'json'
+		,async:false
 		,success:function(data){
+			var patientId = $("#patientId").val();
 			if(data!=null && data!='' && data!=undefined){
-				form.val("ordersTable", {
-					"patientName": data.patientName,
-					"patientAge": data.patientAge,
-					"patientSex": data.patientSex,
-					"patientType": data.patientType,
-					"color": data.color,
-					"baseCureId": data.baseCureId,
-					"remarks": data.remarks
-				})
-				
-				var ordersAccessory = data.ordersAccessory;
-				console.log(ordersAccessory);
-				var array = ordersAccessory.split(",");
-				for (var i = 0; i < array.length; i++) {
-					$.each($('input[name="ordersAccessory"]'),function(){
-						if(array[i] == $(this).val()){
-							$(this).prop('checked',true);
-						}
-					});
+				$("#patientMes").empty();
+				$("#patientMes").append('<option value="">请选择患者</option>');
+				for (var i = 0; i < data.length; i++) {
+					if(patientId!=null && patientId!='' && patientId!=undefined && patientId == data[i].id){
+						$("#patientMes").append('<option selected value="'+data[i].id+','+data[i].baseCureId+'">'+data[i].patientName+'</option>');
+						 if(2 == data[i].baseCureId){
+				    		  $("#baseCureName").html('修复');
+				    		  $("#kousaoyi").attr("href",'runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=0');
+				    	  }else if(3 == data[i].baseCureId){
+				    		  $("#baseCureName").html('正畸');
+				    		  $("#kousaoyi").attr("href",'runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=1');
+				    	  }else if(4 == data[i].baseCureId){
+				    		  $("#baseCureName").html('种植');
+				    		  $("#kousaoyi").attr("href",'runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=2');
+				    	  }
+						  $("#patientId").val(data[i].id);
+			    		  $("#baseCureId").val(data[i].baseCureId);
+						 selectProductTexture(data[i].baseCureId);
+					}else{
+						$("#patientMes").append('<option value="'+data[i].id+','+data[i].baseCureId+'">'+data[i].patientName+'</option>');
+					}
 				}
-				
-				
-				$("#toothPosition1").val(data.toothPosition1);
-				$("#toothPosition2").val(data.toothPosition2);
-				$("#toothPosition3").val(data.toothPosition3);
-				$("#toothPosition4").val(data.toothPosition4);
-				
-				selectProductTexture(data.baseCureId,form,data.baseProductId);
-				selectFactoryByProductId(data.baseProductId,form,data.receiveUnitId);
-				
-				if(data.accessoryName != '' && data.accessoryName != null && data.accessoryName != undefined){
-					  $("#accessoryTr").empty();
-					  $("#kousaoDiv").empty();
-					  $("#accessoryTr").append("<td class='cols-font' >扫描文件</td><td colspan='3' >" +
-					  		"<button class='layui-btn' type='button' onclick=\"$('#uploadFile').val('');$('#uploadFile').click();\">" +
-					  	    "<i class='layui-icon'>&#xe62d;</i>上传扫描文件</button>"+
-		          	        "<input id='uploadFile' type='file'  style='display:none;position: fixed;bottom: 30px;right: 60px;z-index: 999999;'"+
-							"onchange=\"$('#showFileName').html(this.value);\" multiple><span style='margin-left:20px;' id='showFileName'></span></td>");
-					  $("#kousaoDiv").append('<a class="layui-btn layui-btn-sm" href="runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=0">打开口扫仪</a>')
-					  var fileName = data.accessoryName.split(",,");
-					  $('#showFileName').html(fileName[1]);
-				 }else{
-					  $("#accessoryTr").empty();
-					  $("#kousaoDiv").empty();
-				 };
+				form.render();
 			}
 		}
 	})
+}
+// 点击某颗牙齿变成红色
+function add_active(tooth){
+    tooth.addClass('icon_active');
+}
+
+// 点击某颗牙齿变成白色
+function remove_active(tooth){
+    tooth.removeClass('icon_active');
+}	
+
+//清除所有选中牙齿
+function clean_active(all_tooth){
+    all_tooth.removeClass('icon_active');
+}
+var form;
+var table;
+layui.use(['form','table'], function(){
+	form = layui.form;
+	table = layui.table;
+	/*监听选择患者*/
+	form.on('select(patientMes)', function(obj){
+		initPage();
+		if(obj.value !=null && obj.value != '' && obj.value != undefined){
+			var split = obj.value.split(",");
+			if(2 == split[1]){
+	    		  $("#baseCureName").html('修复');
+	    		  $("#kousaoyi").attr("href",'runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=0');
+	    	  }else if(3 == split[1]){
+	    		  $("#baseCureName").html('正畸');
+	    		  $("#kousaoyi").attr("href",'runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=1');
+	    	  }else if(4 == split[1]){
+	    		  $("#baseCureName").html('种植');
+	    		  $("#kousaoyi").attr("href",'runyes3ds1.1://hostApp=Clear&patientId=p001&caseId=111&isNewCase=1&workflow=2');
+	    	  }
+			  $("#patientId").val(split[0]);
+			  $("#baseCureId").val(split[1]);
+			  selectProductTexture(split[1]);
+		}
+		form.render();
+		
+	});
+})
+ function clock(){
+	 var time = new Date();//获取系统当前时间
+	 var year = time.getFullYear();
+	 var month = time.getMonth()+1;
+	 var date= time.getDate();//系统时间月份中的日
+	 var day = time.getDay();//系统时间中的星期值
+	 var weeks = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+	 var week = weeks[day];//显示为星期几
+	 var hour = time.getHours();
+	 var minutes = time.getMinutes();
+	 var seconds = time.getSeconds();
+	 if(month<10){
+	 month = "0"+month; 
+	 }
+	 if(date<10){
+	 date = "0"+date; 
+	 }
+	 if(hour<10){
+	 hour = "0"+hour; 
+	 }
+	 if(minutes<10){
+	 minutes = "0"+minutes; 
+	 }
+	 if(seconds<10){
+	 seconds = "0"+seconds; 
+	 }
+	 //var newDate = year+"年"+month+"月"+date+"日"+week+hour+":"+minutes+":"+seconds;
+	 document.getElementById("clock").innerHTML = year+"年"+month+"月"+date+"日&nbsp;&nbsp;"+week+"&nbsp;&nbsp;"+hour+":"+minutes+":"+seconds;
+	 setTimeout('clock()',1000);
+ }
+function initPage(){
+	$("#patientId").val('');
+	$("#baseCureId").val('');
+	$("#baseCureName").html('');
+	$("#kousaoyi").attr("href",'javascript:void(0)');
+	var li = $('.tooth_choose ul li');
+	var all_span = li.find('span.icon_active');
+    clean_active(all_span);
+    $("#toothNumShow").empty();
+    $("#toothNum").val('');
+    $("#toothColor").val('');
+	$("#selectedToothTable").empty();
+	$("#uploadFile").val('');
+	$("#showFileName").html('');
+	$("#remarks").val('');
+	selectedToothArr = [];
+	$.each($('input[name="ordersAccessory"]:checkbox:checked'),function(){
+		$(this).prop("checked",false);
+    });
+	form.render();
 }

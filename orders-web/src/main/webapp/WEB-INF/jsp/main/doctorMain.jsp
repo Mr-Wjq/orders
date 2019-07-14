@@ -21,7 +21,8 @@
   	 	<p>你好！<span>${sessionScope.loginInfo.zhName }</span>, 欢迎登录</p>
 	</div>
 	<ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline" lay-filter="demo">
-	  <li onclick="sm.pageSkip('page/toCreateOrders')" class="layui-nav-item layui-this"><a href="javascript:;">创建订单</a></li>
+	  <li onclick="sm.pageSkip('patient/toPatient')" class="layui-nav-item layui-this"><a href="javascript:;">病例管理</a></li>
+	  <li onclick="sm.pageSkip('orders/toCreateOrders')" class="layui-nav-item"><a href="javascript:;">创建订单</a></li>
 	  <li onclick="sm.pageSkip('page/toDoctorOrders')" class="layui-nav-item" id="ordersLi" ><a href="javascript:;">订单管理</a></li>
 	  <li onclick="sm.pageSkip('page/toDoctorStatistics')" class="layui-nav-item" id="ordersLi" ><a href="javascript:;">订单统计</a></li>
 	  <li onclick="sm.pageSkip('page/toFactoryProductForDoctor')" class="layui-nav-item"><a href="javascript:;">工厂产品</a></li>
@@ -51,12 +52,13 @@
 		  <div class="layui-tab-content">
 		    <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
 		    	<!--1-->
-		    	<iframe id="systemIframe" src="page/toCreateOrders" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe" framborder="0"></iframe>
+		    	<iframe id="systemIframe" src="patient/toPatient" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe" framborder="0"></iframe>
 		    	<!--1end-->
 		    </div>
 		  </div>
 		</div>
 	</div>
+	<%@ include file="/WEB-INF/jsp/system/footer.jsp" %>
 </div>
 </div>
 

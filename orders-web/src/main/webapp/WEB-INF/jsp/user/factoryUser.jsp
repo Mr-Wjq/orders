@@ -9,7 +9,7 @@
 <body>
 <form class="layui-form" action="" style="margin-top: 20px;">
 <div class="layui-form-item">
-    <label class="layui-form-label">模糊查询</label>
+    <label class="layui-form-label">查询</label>
     <div class="layui-input-inline">
        <input type="text" id="unitName" placeholder="工厂名称" class="layui-input">
     </div>

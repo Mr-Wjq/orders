@@ -8,5 +8,11 @@
     <result column="unit_id" jdbcType="BIGINT" property="unitId" />
     <result column="factory_id" jdbcType="BIGINT" property="factoryId" />
   </resultMap>
-
+ 
+  <select id="selectMyFactory" resultType="com.yzy.entity.SysUnit" >
+  	SELECT su.*
+	FROM data_unit_factory duf
+	INNER JOIN sys_unit su ON duf.factory_id = su.id 
+	WHERE 1 = 1 AND duf.unit_id = #{unitId}
+  </select>
 </mapper>

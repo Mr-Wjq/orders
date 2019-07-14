@@ -87,10 +87,11 @@ public class SystemController extends BaseController {
     	Subject subject = SecurityUtils.getSubject();
     	Session session = subject.getSession();
     	LoginInfo loginInfo = (LoginInfo)session.getAttribute("loginInfo");
-    	
-    	redisTemplate.opsForValue().getOperations().delete(SystemConstant.SHIRO_CACHE_PREFIX + loginInfo.getLoginName());
-        subject.logout();
+    	if(loginInfo!=null) {
+    		redisTemplate.opsForValue().getOperations().delete(SystemConstant.SHIRO_CACHE_PREFIX + loginInfo.getLoginName());
+    	}
     	redisTemplate.opsForValue().getOperations().delete(session.getId());
+        subject.logout();
     	response.sendRedirect("/");
     }
     @RequestMapping(value = "getPhoneCode", method = RequestMethod.GET)

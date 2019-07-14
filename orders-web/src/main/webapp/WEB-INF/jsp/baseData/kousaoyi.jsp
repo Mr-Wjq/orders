@@ -10,7 +10,7 @@
 
 <form class="layui-form" action="" style="margin-top: 20px;">
 <div class="layui-form-item">
-    <label class="layui-form-label">模糊查询</label>
+    <label class="layui-form-label">查询</label>
     
     <div class="layui-input-inline">
        <input type="text" id="kousaoyiName" placeholder="品牌" class="layui-input">
@@ -27,7 +27,7 @@
 <!-- 数据表格 -->
 <table class="layui-hide" id="kousaoyiTableId" lay-filter="kousaoyiTableFilter"></table>
 
-<script type="text/html" id="productTableToolbar">
+<script type="text/html" id="kousaoyiTableToolbar">
   <div class="layui-btn-container">
 	<button class="layui-btn layui-btn-sm" lay-event="insert">新增</button>
     <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
@@ -44,13 +44,13 @@
 	  	<div class="layui-form-item">
 		    <label class="layui-form-label">品牌</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="kousaoyiName" required  lay-verify="kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
+		      <input type="text" name="kousaoyiName" required  lay-verify="required|kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
 		    </div>
 	    </div>
 	  	<div class="layui-form-item">
 		    <label class="layui-form-label">启动链接</label>
 		    <div class="layui-input-block">
-		        <textarea name="openMethod" placeholder="请输入内容" lay-verify="kongge" class="layui-textarea"></textarea>
+		        <textarea name="openMethod" placeholder="请输入内容" lay-verify="required|kongge" class="layui-textarea"></textarea>
 		    </div>
 	    </div>
 	    <div class="layui-form-item">
@@ -65,17 +65,16 @@
 <div id="updateDiv" style="display: none;padding: 10px;" >
 	<form class="layui-form" action="" lay-filter="updateFilter">
 		<input type="hidden" name="id" />
-	  	<form class="layui-form" action="">
 	  	<div class="layui-form-item">
 		    <label class="layui-form-label">品牌</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="kousaoyiName" required  lay-verify="kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
+		      <input type="text" name="kousaoyiName" required  lay-verify="required|kongge" placeholder="请输入品牌" autocomplete="off" class="layui-input">
 		    </div>
 	    </div>
 	  	<div class="layui-form-item">
 		    <label class="layui-form-label">启动链接</label>
 		    <div class="layui-input-block">
-		        <textarea name="openMethod" placeholder="请输入内容" lay-verify="kongge" class="layui-textarea"></textarea>
+		        <textarea name="openMethod" placeholder="请输入内容" lay-verify="required|kongge" class="layui-textarea"></textarea>
 		    </div>
 	    </div>
 	    <div class="layui-form-item">

@@ -18,7 +18,7 @@ layui.use(['table','laydate'], function(){
 	 } 
   	,limit:20
   	,limits:[20,30,50,100,200]
-    ,toolbar: '#productTableToolbar'
+    ,toolbar: '#kousaoyiTableToolbar'
     ,title: '数据表'
     ,cols: [[
 
@@ -129,11 +129,6 @@ layui.use(['table','laydate'], function(){
   //监听提交
   form.on('submit(insert)', function(data){
 	  
-	 if((data.field.kousaoyiName == '' || data.field.kousaoyiName == null || data.field.kousaoyiName == undefined) && 
-			 (data.field.openMethod == '' || data.field.openMethod == null || data.field.openMethod == undefined) ){
-		 layer.msg("品牌和启动链接不能都为空!");
-		 return false;
-	 };
 	 var length1 = data.field.openMethod.split("\'").length;
 	 var length2 = data.field.openMethod.split("\"").length;
 	 if(length1>1 || length2>1){
@@ -159,11 +154,6 @@ layui.use(['table','laydate'], function(){
   });
   form.on('submit(update)', function(data){
 	  
-	  if((data.field.kousaoyiName == '' || data.field.kousaoyiName == null || data.field.kousaoyiName == undefined) && 
-				 (data.field.openMethod == '' || data.field.openMethod == null || data.field.openMethod == undefined) ){
-			 layer.msg("品牌和启动链接不能都为空!");
-			 return false;
-	  };
 	  var length1 = data.field.openMethod.split("\'").length;
 	  var length2 = data.field.openMethod.split("\"").length;
 	  if(length1>1 || length2>1){
