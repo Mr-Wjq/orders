@@ -1,10 +1,9 @@
 package com.yzy.service.impl;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +14,19 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yzy.dao.BaseBrandMapper;
 import com.yzy.dao.BaseCureMapper;
 import com.yzy.dao.BaseExpressMapper;
 import com.yzy.dao.BaseProductMapper;
-import com.yzy.dao.BaseTextureMapper;
+import com.yzy.dao.DataDiscountMapper;
+import com.yzy.dao.DataDiscountUnitMapper;
 import com.yzy.dao.DataProductPriceMapper;
-import com.yzy.entity.BaseBrand;
 import com.yzy.entity.BaseCure;
 import com.yzy.entity.BaseExpress;
 import com.yzy.entity.BaseProduct;
-import com.yzy.entity.BaseTexture;
+import com.yzy.entity.DataDiscount;
+import com.yzy.entity.DataDiscountUnit;
 import com.yzy.entity.DataProductPrice;
-import com.yzy.entity.SysUnit;
-import com.yzy.entity.vo.ProductTexture;
+import com.yzy.entity.vo.OrdersProductVO;
 import com.yzy.entity.vo.ProductVO;
 import com.yzy.service.BaseDataService;
 import com.yzy.utils.LayuiTable;
@@ -50,6 +48,10 @@ public class BaseDataServiceImpl implements BaseDataService{
 
 	@Autowired
 	private DataProductPriceMapper dataProductPriceMapper;
+	@Autowired
+	private DataDiscountMapper dataDiscountMapper;
+	@Autowired
+	private DataDiscountUnitMapper dataDiscountUnitMapper;
 	
 	@Override
 	public LayuiTable selectCure(int page, int limit) {
@@ -145,6 +147,10 @@ public class BaseDataServiceImpl implements BaseDataService{
  		return LayuiTable.success(sum, list);
 	}
 	@Override
+	public List<ProductVO> selectAllProduct() {
+		return  baseProductMapper.selectProductVO( null,  null,  null, null);
+	}
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Result insertProduct(BaseProduct baseProduct) {
 		try {
@@ -176,10 +182,33 @@ public class BaseDataServiceImpl implements BaseDataService{
 				String[] split = ids.split(",");
 				int length = split.length;
 				for (int i = 0; i < length; i++) {
+					//置产品材质为删除状态
 					BaseProduct baseProduct = new BaseProduct();
 					baseProduct.setStatus(0);
 					baseProduct.setId(Long.parseLong(split[i]));
 					baseProductMapper.updateByPrimaryKeySelective(baseProduct);
+					
+					Example example = new Example(DataDiscount.class);
+					example.createCriteria().andEqualTo("baseProductId", split[i]).andNotEqualTo("status",0);
+					List<DataDiscount> list = dataDiscountMapper.selectByExample(example);
+					for (DataDiscount dd : list) {
+						//产品材质被删除后跟他相关联的优惠券也得置为删除状态
+						DataDiscount dataDiscount = new DataDiscount();
+						dataDiscount.setId(dd.getId());
+						dataDiscount.setStatus(0);
+						dataDiscountMapper.updateByPrimaryKeySelective(dataDiscount);
+						//产品材质被删除后跟他相关联的单位优惠券也得置为删除状态
+						Example example2 = new Example(DataDiscountUnit.class);
+						example2.createCriteria().andEqualTo("dataDiscountId", dd.getId());
+						DataDiscountUnit dataDiscountUnit = new DataDiscountUnit();
+						dataDiscountUnit.setStatus(0);
+						dataDiscountUnitMapper.updateByExampleSelective(dataDiscountUnit, example2);
+					}
+					
+					//产品材质被删除后跟他相关联的工厂产品也得置为删除状态
+					Example example3 = new Example(DataProductPrice.class);
+					example3.createCriteria().andEqualTo("baseProductId", split[i]);
+					dataProductPriceMapper.deleteByExample(example3);
 				}
 			}
 		} catch (Exception e) {
@@ -195,9 +224,10 @@ public class BaseDataServiceImpl implements BaseDataService{
 		return null;
 	}
 	@Override
-	public LayuiTable selectFactoryProduct(int page,int limit,Long cureId,String productName,String textureName,String brandName,Long unitId) {
+	public LayuiTable selectFactoryProduct(int page,int limit,Long cureId,String productName,String textureName
+			,String brandName,String factoryName,Long factoryUnitId) {
 		PageHelper.startPage(page, limit);
-		List<ProductVO> list = baseProductMapper.selectFactoryProductVO( cureId,  productName,  textureName, brandName,unitId,null);
+		List<ProductVO> list = baseProductMapper.selectFactoryProductVO( cureId,  productName,  textureName, brandName,factoryName,factoryUnitId);
 		PageInfo<ProductVO> pageInfo = new PageInfo<>(list);   
  		long sum = pageInfo.getTotal();
  		return LayuiTable.success(sum, list);
@@ -248,7 +278,7 @@ public class BaseDataServiceImpl implements BaseDataService{
 	}
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Result factoryUpdateProductPrice(Long id, String price) {
+	public Result factoryUpdateProductPrice(Long id, BigDecimal price) {
 		DataProductPrice dataProductPrice = new DataProductPrice();
 		dataProductPrice.setId(id);
 		dataProductPrice.setPrice(price);
@@ -262,41 +292,17 @@ public class BaseDataServiceImpl implements BaseDataService{
 		return Result.success();
 	}
 	@Override
-	public List<ProductTexture> selectProductTexture(Long baseCureId) {
-		
-		ArrayList<ProductTexture> arrayList = new ArrayList<ProductTexture>();
-		Example example = new Example(BaseProduct.class);
-		example.createCriteria().andEqualTo("baseCureId", baseCureId).andNotEqualTo("status", 0);
-		List<BaseProduct> list = baseProductMapper.selectByExample(example);
-		for (BaseProduct baseProduct : list) {
-			ProductTexture productTexture = new ProductTexture();
-			productTexture.setId(baseProduct.getId());
-			StringBuffer buffer = new StringBuffer();
-			if(StringUtils.isNotBlank(baseProduct.getTextureName())) {
-				buffer.append("<span style='font-size:50px;' >材质:"+baseProduct.getTextureName()+"</span>");
-			}else {
-				buffer.append("材质:无");
-			}
-			if(StringUtils.isNotBlank(baseProduct.getBrandName())) {
-				buffer.append("<br>--品牌:"+baseProduct.getBrandName());
-			}else {
-				buffer.append("--品牌:无");
-			}
-			if(StringUtils.isNotBlank(baseProduct.getProductName())) {
-				buffer.append("--产品名称:"+baseProduct.getProductName());
-			}else {
-				buffer.append("--产品名称:无");
-			}
-			productTexture.setName(buffer.toString());
-			arrayList.add(productTexture);
-		}
-		return arrayList;
+	public LayuiTable selectOrdersProductVO(Long baseCureId,Long currUnitId) {
+		List<OrdersProductVO> list = baseProductMapper.selectOrdersProductVO(baseCureId,currUnitId);
+		PageInfo<OrdersProductVO> pageInfo = new PageInfo<>(list);   
+ 		long sum = pageInfo.getTotal();
+ 		return LayuiTable.success(sum, list);
 	}
 	@Override
 	public LayuiTable selectFactoryProductForDoctor(int page, int limit, Long cureId, String productName,
-			String textureName, String brandName, String factoryName) {
+			String textureName, String brandName, String factoryName,Long currUnitId) {
 		PageHelper.startPage(page, limit);
-		List<ProductVO> list = baseProductMapper.selectFactoryProductVO( cureId,  productName,  textureName, brandName,null,factoryName);
+		List<ProductVO> list = baseProductMapper.selectFactoryProductForDoctor(cureId,  productName,  textureName, brandName,factoryName,currUnitId);
 		PageInfo<ProductVO> pageInfo = new PageInfo<>(list);   
  		long sum = pageInfo.getTotal();
  		return LayuiTable.success(sum, list);

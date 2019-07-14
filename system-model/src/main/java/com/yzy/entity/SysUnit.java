@@ -78,6 +78,9 @@ public class SysUnit {
     @Column(name = "is_final")
     private Integer isFinal;
 
+    private Long dataUnitFromId;
+    private Long dataKousaoyiId;
+    
     /**
      * 获取主键id
      *
@@ -293,4 +296,21 @@ public class SysUnit {
     public void setIsFinal(Integer isFinal) {
         this.isFinal = isFinal;
     }
+
+	public Long getDataUnitFromId() {
+		return dataUnitFromId;
+	}
+
+	public void setDataUnitFromId(Long dataUnitFromId) {
+		this.dataUnitFromId = dataUnitFromId;
+	}
+
+	public Long getDataKousaoyiId() {
+		return dataKousaoyiId;
+	}
+
+	public void setDataKousaoyiId(Long dataKousaoyiId) {
+		this.dataKousaoyiId = dataKousaoyiId;
+	}
+    
 }

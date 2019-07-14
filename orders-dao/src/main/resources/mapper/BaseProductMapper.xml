@@ -40,25 +40,60 @@
   </select>
   
   <select id="selectFactoryProductVO" resultType="com.yzy.entity.vo.ProductVO">
-        SELECT 
-        dpp.id
-        ,dpp.price
-        ,dpp.factory_id
-        ,su.unit_name AS factory_name
-        ,bp.product_name
-        ,bp.base_cure_id
-        ,bp.texture_name
-        ,bp.brand_name
-        ,bc.cure_name AS cure_name
-        
-        FROM base_product bp
+       SELECT 
+		        dpp.id
+		        ,dpp.price
+		        ,dpp.factory_id
+		        ,su.unit_name AS factory_name
+		        ,bp.product_name
+		        ,bp.base_cure_id
+		        ,bp.texture_name
+		        ,bp.brand_name
+		        ,bc.cure_name AS cure_name
+         FROM data_product_price dpp
+	    INNER JOIN base_product bp ON dpp.base_product_id = bp.id
         INNER JOIN base_cure bc ON bp.base_cure_id = bc.id
-        INNER JOIN data_product_price dpp ON dpp.base_product_id = bp.id
         INNER JOIN sys_unit su ON dpp.factory_id = su.id
         WHERE 1=1
-        <if test="unitId !=null ">
-            AND dpp.factory_id=#{unitId}
+        <if test="factoryUnitId !=null ">
+            AND dpp.factory_id=#{factoryUnitId}
         </if>
+        <if test="cureId !=null ">
+            AND bp.base_cure_id = #{cureId}
+        </if>
+        <if test="productName !=null and productName.length() !=0">
+            AND bp.product_name LIKE CONCAT ('%/',#{productName},'%') ESCAPE '/'
+        </if>
+        <if test="textureName !=null and textureName.length() !=0">
+            AND bp.texture_name LIKE CONCAT ('%/',#{textureName},'%') ESCAPE '/'
+        </if>
+        <if test="brandName !=null and brandName.length() !=0">
+            AND bp.brand_name LIKE CONCAT ('%/',#{brandName},'%') ESCAPE '/'
+        </if>
+        <if test="factoryName !=null and factoryName.length() !=0">
+            AND su.unit_name LIKE CONCAT ('%/',#{factoryName},'%') ESCAPE '/'
+        </if>
+        AND  bp.status != 0
+        order by bp.texture_name desc
+  </select>
+  
+  <select id="selectFactoryProductForDoctor" resultType="com.yzy.entity.vo.ProductVO">
+        SELECT 
+		        dpp.id
+		        ,dpp.price
+		        ,dpp.factory_id
+		        ,su.unit_name AS factory_name
+		        ,bp.product_name
+		        ,bp.base_cure_id
+		        ,bp.texture_name
+		        ,bp.brand_name
+		        ,bc.cure_name AS cure_name
+         FROM data_product_price dpp
+	    INNER JOIN base_product bp ON dpp.base_product_id = bp.id
+        INNER JOIN base_cure bc ON bp.base_cure_id = bc.id
+        INNER JOIN sys_unit su ON dpp.factory_id = su.id
+        INNER JOIN data_unit_factory duf ON duf.factory_id = dpp.factory_id
+        WHERE 1=1 AND duf.unit_id = #{currUnitId}
         <if test="cureId !=null ">
             AND bp.base_cure_id = #{cureId}
         </if>
@@ -105,4 +140,22 @@
         order by bp.brand_name desc
   </select>
   
+  <select id="selectOrdersProductVO" resultType="com.yzy.entity.vo.OrdersProductVO">
+  		SELECT dpp.`factory_id`
+		       ,dpp.`base_product_id`
+		       ,dpp.`price` AS product_price
+		       ,bp.`base_cure_id`
+		       ,bp.`product_name`
+		       ,bp.`texture_name`
+		       ,bp.`brand_name`
+		       ,dd.`discount_price`
+		       ,ddu.`num`
+		       ,ddu.`end_time`
+		  FROM `data_product_price` dpp 
+     LEFT JOIN `base_product` bp ON dpp.`base_product_id` = bp.`id` AND bp.`status` != 0 
+    INNER JOIN `data_unit_factory` duf ON dpp.`factory_id` = duf.`factory_id` AND duf.`unit_id` = #{currUnitId}
+     LEFT JOIN `data_discount` dd ON dpp.`base_product_id` = dd.`base_product_id` AND dd.`status` != 0
+     LEFT JOIN `data_discount_unit` ddu ON dd.`id` = ddu.`data_discount_id` AND ddu.`status` != 0
+         WHERE bp.`base_cure_id` = #{cureId}
+  </select>
 </mapper>

@@ -26,10 +26,10 @@ layui.use(['table','laydate'], function(){
       ,{type:'checkbox'}
       ,{field:'loginName', title:'账号' }
       ,{field:'unitName', title:'工厂名称' }
-      ,{field:'cs', title:'城市',templet:function(row){
+      /*,{field:'cs', title:'城市',templet:function(row){
     	  return row.unitProvince+row.unitCity+row.unitDistrict
       }}
-      ,{field:'unitAddress', title:'详细地址'}
+      ,{field:'unitAddress', title:'详细地址'}*/
       ,{field:'zhName', title:'姓名' }
       ,{field:'phone', title:'手机号' }
       ,{field:'email', title:'邮箱' }
@@ -40,7 +40,7 @@ layui.use(['table','laydate'], function(){
     		  return "员工";
     	  }
        }}
-      ,{field:'status', title:'状态' ,templet: '#statusBtn'}
+      ,{field:'status', title:'状态' ,width:100,templet: '#statusBtn'}
       /*,{field:'isFinal', title:'能否删除' ,templet:function(row){
     	  if(row.isFinal == 2){
     		  return "<span style='color: red;'>NO</span>";
@@ -51,7 +51,7 @@ layui.use(['table','laydate'], function(){
       ,{field:'createTime', title:'创建时间',templet:function(row){
     	  return common_tool.timeDate(row.createTime);
       }}
-      ,{field:'cz', title:'操作',templet: '#lineToolbar'}
+      ,{field:'cz', title:'操作',fixed: 'right',width:150,templet: '#lineToolbar'}
     ]]
     ,page: true
   });

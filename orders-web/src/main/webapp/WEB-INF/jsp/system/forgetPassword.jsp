@@ -15,7 +15,7 @@
 	</style>
 </head>
 <body>
-<div><img  class="head-title" alt="logo" src="static/images/logo_1.png"><span style="font-size: 20px;font-weight: bold;" >重置密码</span></div>
+<div><a href="<%=basePath%>"><img  class="head-title" alt="logo" src="static/images/logo_blue.png"></a><span style="font-size: 20px;font-weight: bold;" >重置密码</span></div>
 <!-- 导航 -->
 <div class="rebinding-box">
 	<div class="box-timeline">

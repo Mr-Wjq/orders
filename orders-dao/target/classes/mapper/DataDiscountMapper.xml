@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzy.dao.DataDiscountMapper" >
+  <resultMap id="BaseResultMap" type="com.yzy.entity.DataDiscount" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="discount_name" property="discountName" jdbcType="VARCHAR" />
+    <result column="discount_price" property="discountPrice" jdbcType="DECIMAL" />
+    <result column="discount_type" property="discountType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="factory_id" property="factoryId" jdbcType="BIGINT" />
+    <result column="base_product_id" property="baseProductId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectVo" resultType="com.yzy.entity.vo.DataDiscountVO">
+     select  dd.*
+     		 ,bp.texture_name
+	     	 ,bp.brand_name
+	         ,su.unit_name as factory_name
+       from  data_discount dd  
+  left join  base_product bp on dd.base_product_id = bp.id
+  left join  sys_unit su on dd.factory_id = su.id
+  WHERE 1 = 1
+  <if test="discountName !=null and discountName.length() !=0">
+      AND dd.discount_name LIKE CONCAT ('%/',#{discountName},'%') ESCAPE '/'
+  </if>
+  <if test="discountType !=null">
+      AND dd.discount_type = #{discountType}
+  </if>
+  AND dd.status != 0
+  ORDER BY dd.create_time desc
+  </select>
+  
+</mapper>

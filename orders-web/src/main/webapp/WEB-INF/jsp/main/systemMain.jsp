@@ -9,68 +9,71 @@
 </head>
 <body>
 <div class="main-layout" >
-<!-- 左侧导航 -->
-<div class="left-nav" >
-	<div class="nav-logo">
-		<img alt="logo" src="static/images/logo_1.png">
-	</div>
-	<div class="user-photo" >
-  	 	<a class="img" title="我的头像" onclick="sm.pageSkip('page/systemPerson')">
-  	 		<img src="${sessionScope.loginInfo.userPhoto }">
-  	 	</a>
-  	 	<p>你好！<span>${sessionScope.loginInfo.zhName }</span>, 欢迎登录</p>
-	</div>
-	<ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline" lay-filter="demo">
-	  <li class="layui-nav-item layui-this"><a onclick="sm.pageSkip('page/toSystemStatistics')" href="javascriprt:void(0)">首页</a></li>
-	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">订单明细</a></li>
-	  <li class="layui-nav-item layui-nav-itemed">
-	    <a href="javascript:;">用户</a>
-	    <dl class="layui-nav-child">
-	      <dd><a onclick="sm.pageSkip('page/systemUser')" href="javascript:;">管理员</a></dd>
-	      <dd><a onclick="sm.pageSkip('page/doctorUser')" href="javascript:;">医院/诊所</a></dd>
-	      <dd><a onclick="sm.pageSkip('page/factoryUser')" href="javascript:;">工厂</a></dd>
-	    </dl>
-	  </li>
-	  <li class="layui-nav-item layui-nav-itemed">
-	    <a href="javascript:;">产品管理</a>
-	    <dl class="layui-nav-child">
-	      <dd><a onclick="sm.pageSkip('page/toCure')" href="javascript:;">治疗类型</a></dd>
-	      <dd><a onclick="sm.pageSkip('page/toProduct')" href="javascript:;">产品名称</a></dd>
-	      <dd><a onclick="sm.pageSkip('page/toFactoryProductForDoctor')" href="javascript:;">工厂产品报价</a></dd>
-	    </dl>
-	  </li>
-	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">口扫仪管理</a></li>
-	  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;"></a></li>
-	</ul>
-</div>
-<!-- 右侧导航 -->
-<div class="main-layout-container" >
-	<div class="main-layout-header">
-		<ul class="layui-nav" >
-		  <li class="layui-nav-item">
-		    <a href="javascript:;">${sessionScope.loginInfo.zhName }</a>
+	<!-- 左侧导航 -->
+	<div class="left-nav" >
+		<div class="nav-logo">
+			<img alt="logo" src="static/images/logo_1.png">
+		</div>
+		<div class="user-photo" >
+	  	 	<a class="img" title="我的头像" onclick="sm.pageSkip('page/systemPerson')">
+	  	 		<img src="${sessionScope.loginInfo.userPhoto }">
+	  	 	</a>
+	  	 	<p>你好！<span>${sessionScope.loginInfo.zhName }</span>, 欢迎登录</p>
+		</div>
+		<ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline" lay-filter="demo">
+		  <li class="layui-nav-item layui-this"><a onclick="sm.pageSkip('page/toSystemStatistics')" href="javascriprt:void(0)">首页</a></li>
+		  <li class="layui-nav-item"><a onclick="sm.pageSkip('page/toSystemOrders')" href="javascript:;">订单明细</a></li>
+		  <li class="layui-nav-item"><a onclick="sm.pageSkip('unit/toSysUnit')" href="javascript:;">单位管理</a></li>
+		  <li class="layui-nav-item layui-nav-itemed">
+		    <a href="javascript:;">用户管理</a>
 		    <dl class="layui-nav-child">
-		      <dd><a onclick="sm.pageSkip('page/systemPerson')" href="javascript:void(0);">个人中心</a></dd>
-		      <dd id="updatePwd"><a href="javascript:void(0);">重置密码</a></dd>
+		      <dd><a onclick="sm.pageSkip('page/systemUser')" href="javascript:;">管理员</a></dd>
+		      <dd><a onclick="sm.pageSkip('page/doctorUser')" href="javascript:;">医院/诊所</a></dd>
+		      <dd><a onclick="sm.pageSkip('page/factoryUser')" href="javascript:;">工厂</a></dd>
 		    </dl>
 		  </li>
-		  <li id="logout" class="layui-nav-item"><a href="javascript:void(0);">立即退出</a></li>
+		  <li class="layui-nav-item layui-nav-itemed">
+		    <a href="javascript:;">产品管理</a>
+		    <dl class="layui-nav-child">
+		      <%-- <dd><a onclick="sm.pageSkip('page/toCure')" href="javascript:;">治疗类型</a></dd> --%>
+		      <dd><a onclick="sm.pageSkip('page/toProduct')" href="javascript:;">产品名称</a></dd>
+		      <dd><a onclick="sm.pageSkip('page/toFactoryProductForSystem')" href="javascript:;">工厂产品报价</a></dd>
+		    </dl>
+		  </li>
+		  <li class="layui-nav-item"><a onclick="sm.pageSkip('kousaoyi/toKousaoyi')" href="javascript:;">口扫仪管理</a></li>
+		  <li class="layui-nav-item"><a onclick="sm.pageSkip('unitFrom/toUnitFrom')" href="javascript:;">医院/诊所来源</a></li>
+		  <li class="layui-nav-item"><a onclick="sm.pageSkip('discount/toDiscount')" href="javascript:;">优惠券管理</a></li>
 		</ul>
 	</div>
-	
-    <div class="main-layout-body">
-		<!--tab 切换-->
-		<div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
-		  <div class="layui-tab-content">
-		    <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
-		    	<!--1-->
-		    	<iframe id="systemIframe" src="page/toSystemStatistics" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe" framborder="0"></iframe>
-		    	<!--1end-->
-		    </div>
-		  </div>
+	<!-- 右侧导航 -->
+	<div class="main-layout-container" >
+		<div class="main-layout-header">
+			<ul class="layui-nav" >
+			  <li class="layui-nav-item">
+			    <a href="javascript:;">${sessionScope.loginInfo.zhName }</a>
+			    <dl class="layui-nav-child">
+			      <dd><a onclick="sm.pageSkip('page/systemPerson')" href="javascript:void(0);">个人中心</a></dd>
+			      <dd id="updatePwd"><a href="javascript:void(0);">重置密码</a></dd>
+			    </dl>
+			  </li>
+			  <li id="logout" class="layui-nav-item"><a href="javascript:void(0);">立即退出</a></li>
+			</ul>
 		</div>
+		
+	    <div class="main-layout-body">
+			<!--tab 切换-->
+			<div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
+			  <div class="layui-tab-content">
+			    <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
+			    	<!--1-->
+			    	<iframe id="systemIframe" src="page/toSystemStatistics" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe" framborder="0"></iframe>
+			    	<!--1end-->
+			    </div>
+			  </div>
+			</div>
+		</div>
+		<%@ include file="/WEB-INF/jsp/system/footer.jsp" %>
 	</div>
-</div>
 </div>
 
 <div id="updatePasswordDiv" style="display: none;padding: 10px;" >

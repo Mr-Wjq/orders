@@ -35,7 +35,7 @@ var login = {
 				,success:function(result){
 					if (result.code == 10000) {
 						login.changeImg();
-	                    location.href='page/toMain';
+	                    location.href=basePath + 'page/toMain';
 	                    return false;
 	                }
 					else{

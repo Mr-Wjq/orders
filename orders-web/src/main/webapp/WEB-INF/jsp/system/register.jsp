@@ -15,7 +15,7 @@
 	</style>
 </head>
 <body>
-<div><img  class="head-title" alt="logo" src="static/images/logo_1.png"><span style="font-size: 20px;font-weight: bold;" >注册</span></div>
+<div><a href="<%=basePath%>"><img  class="head-title" alt="logo" src="static/images/logo_blue.png"></a><span style="font-size: 20px;font-weight: bold;" >注册</span></div>
 <!-- 导航 -->
 <div class="rebinding-box">
 	<div class="box-timeline">
@@ -55,7 +55,7 @@
 		<div class="layui-form-item">
 	      <label class="layui-form-label">单位名称<span class="required-sign">☀</span></label>
 	      <div class="layui-input-block">
-	        <input type="text" name="unitName" lay-verify="required|zhName" placeholder="请输入单位名称" autocomplete="off" maxlength="50" class="layui-input">
+	        <input type="text" name="unitName" lay-verify="required" placeholder="请输入单位名称" autocomplete="off" maxlength="50" class="layui-input">
 	      </div>
 	    </div>
 		<div class="layui-form-item">

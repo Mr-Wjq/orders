@@ -21,7 +21,35 @@ var common_tool = {
 			return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
 		}
 	}
-}    
+	,timeDay:function(value){
+		if ("" != value && null != value &&undefined != value) {
+			var datetime = new Date();
+			datetime.setTime(value);
+			var year    = datetime.getFullYear() <= 9 ?  "0" + datetime.getFullYear() : datetime.getFullYear();
+			var month   = datetime.getMonth()<=9 ? "0" + (datetime.getMonth()+1):(datetime.getMonth()+1);
+			var date    = datetime.getDate() <=9 ? "0" + datetime.getDate():datetime.getDate();
+			var hour    = datetime.getHours()<=9 ? "0" + datetime.getHours():datetime.getHours();
+			if(hour<=9){
+				hour="0"+hour;
+			}
+			var minute = datetime.getMinutes();
+			if(minute<=9){
+				minute="0"+minute;
+			}
+			var second = datetime.getSeconds();
+			if(second<=9){
+				second="0"+second;
+			}
+			return year + "-" + month + "-" + date;
+		}
+	}
+}
+
+var basePath = '';
+$(function(){
+	basePath =  $("#basePath").val();
+})
+
 //全局的ajax访问，处理ajax清求时sesion超时 
 $.ajaxSetup({
 	

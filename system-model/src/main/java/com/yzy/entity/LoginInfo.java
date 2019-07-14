@@ -36,6 +36,7 @@ public class LoginInfo implements Serializable {
     private String firstPage;
     
     private Long unitId;
+    private String unitName;
 
 	public Long getId() {
 		return id;
@@ -109,4 +110,11 @@ public class LoginInfo implements Serializable {
 		this.userPhoto = userPhoto;
 	}
 
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
 }

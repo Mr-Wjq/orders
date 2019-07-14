@@ -18,3 +18,4 @@ Long version = System.currentTimeMillis();
 	.required-sign{color: red;}
 	
 </style>
+<input type="hidden" id="basePath" value="<%=basePath%>"/>

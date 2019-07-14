@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzy.dao.DataPatientMapper" >
+  <resultMap id="BaseResultMap" type="com.yzy.entity.DataPatient" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="create_id" property="createId" jdbcType="BIGINT" />
+    <result column="patient_name" property="patientName" jdbcType="VARCHAR" />
+    <result column="patient_age" property="patientAge" jdbcType="INTEGER" />
+    <result column="patient_sex" property="patientSex" jdbcType="INTEGER" />
+    <result column="patient_phone" property="patientPhone" jdbcType="VARCHAR" />
+    <result column="patient_type" property="patientType" jdbcType="INTEGER" />
+    <result column="base_cure_id" property="baseCureId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

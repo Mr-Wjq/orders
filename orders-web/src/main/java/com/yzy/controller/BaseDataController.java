@@ -1,5 +1,6 @@
 package com.yzy.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +17,7 @@ import com.yzy.entity.BaseCure;
 import com.yzy.entity.BaseExpress;
 import com.yzy.entity.BaseProduct;
 import com.yzy.entity.LoginInfo;
-import com.yzy.entity.vo.ProductTexture;
+import com.yzy.entity.vo.ProductVO;
 import com.yzy.service.BaseDataService;
 import com.yzy.utils.LayuiTable;
 import com.yzy.utils.Result;
@@ -65,6 +66,11 @@ public class BaseDataController extends BaseController{
 	public LayuiTable selectProduct(int page,int limit,Long cureId,String productName,String textureName,String brandName) {
 		return baseDataService.selectProduct( page, limit, cureId, productName, textureName, brandName);
 	}
+	@RequestMapping(value = "selectAllProduct", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ProductVO> selectAllProduct() {
+		return baseDataService.selectAllProduct();
+	}
 	@RequestMapping(value = "insertProduct", method = RequestMethod.POST)
 	@ResponseBody
 	public Result insertProduct(BaseProduct baseProduct) {
@@ -85,15 +91,22 @@ public class BaseDataController extends BaseController{
 	}
 	@RequestMapping(value = "selectFactoryProduct", method = RequestMethod.GET)
 	@ResponseBody
-	public LayuiTable selectFactoryProduct(int page,int limit,Long cureId,String productName,String textureName,String brandName) {
+	public LayuiTable selectFactoryProduct(int page,int limit,Long cureId,String productName,String textureName,String brandName,String factoryName) {
 		Subject subject = SecurityUtils.getSubject();
 		LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");   //当前登录用户
-		return baseDataService.selectFactoryProduct( page, limit, cureId, productName, textureName, brandName,loginInfo.getUnitId());
+		return baseDataService.selectFactoryProduct( page, limit, cureId, productName, textureName, brandName,factoryName,loginInfo.getUnitId());
+	}
+	@RequestMapping(value = "selectFactoryProductForSystem", method = RequestMethod.GET)
+	@ResponseBody
+	public LayuiTable selectFactoryProductForSystem(int page,int limit,Long cureId,String productName,String textureName,String brandName,String factoryName) {
+		return baseDataService.selectFactoryProduct( page, limit, cureId, productName, textureName, brandName,factoryName,null);
 	}
 	@RequestMapping(value = "selectFactoryProductForDoctor", method = RequestMethod.GET)
 	@ResponseBody
 	public LayuiTable selectFactoryProductForDoctor(int page,int limit,Long cureId,String productName,String textureName,String brandName,String factoryName) {
-		return baseDataService.selectFactoryProductForDoctor( page, limit, cureId, productName, textureName, brandName,factoryName);
+		Subject subject = SecurityUtils.getSubject();
+		LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");   //当前登录用户
+		return baseDataService.selectFactoryProductForDoctor( page, limit, cureId, productName, textureName, brandName,factoryName,loginInfo.getUnitId());
 	}
 	@RequestMapping(value = "selectProductByCureId", method = RequestMethod.GET)
 	@ResponseBody
@@ -127,8 +140,8 @@ public class BaseDataController extends BaseController{
 	}
 	@RequestMapping(value = "factoryUpdateProductPrice", method = RequestMethod.POST)
 	@ResponseBody
-	public Result factoryUpdateProductPrice(Long id,String price) {
-		if(StringUtils.isBlank(price)) {
+	public Result factoryUpdateProductPrice(Long id,BigDecimal price) {
+		if(price == null) {
 			return Result.error("请输入价格");
 		}
 		if(id == null) {
@@ -136,10 +149,12 @@ public class BaseDataController extends BaseController{
 		}
 		return baseDataService.factoryUpdateProductPrice(id,price);
 	}
-	@RequestMapping(value = "selectProductTexture", method = RequestMethod.GET)
+	@RequestMapping(value = "selectOrdersProductVO", method = RequestMethod.GET)
 	@ResponseBody
-	public List<ProductTexture> selectProductTexture(Long baseCureId) {
-		return baseDataService.selectProductTexture(baseCureId);
+	public LayuiTable selectOrdersProductVO(Long baseCureId) {
+		Subject subject = SecurityUtils.getSubject();
+		LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");   //当前登录用户
+		return baseDataService.selectOrdersProductVO(baseCureId,loginInfo.getUnitId());
 	}
 	
 	/************************************快递******************************************/

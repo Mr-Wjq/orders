@@ -86,12 +86,30 @@ public class SysUserServiceImpl implements SysUserService {
         SysUserRole sysUserRole = sysUserRoleMapper.selectByUserId(user.getId());
         loginInfo.setRoleId(sysUserRole.getSysRoleId());
         SysUnitUser unitUserByUser = sysUnitUserMapper.selectUnitUserByUserId(user.getId());
-        loginInfo.setUnitId(unitUserByUser.getSysUnitId());
+        SysUnit currentUnit = sysUnitMapper.selectByPrimaryKey(unitUserByUser.getSysUnitId());
+        loginInfo.setUnitId(currentUnit.getId());
+        loginInfo.setUnitName(currentUnit.getUnitName());
         SysFirstPage sysFirstPage  = sysFirstPageMapper.selectByRoleId(sysUserRole.getSysRoleId());
         loginInfo.setFirstPage(sysFirstPage.getFirstPagePath());
 		return loginInfo;
 	}
-
+	public void refreshLoginInfo(Long userId){
+		Subject subject = SecurityUtils.getSubject();
+    	Session session = subject.getSession();
+    	LoginInfo loginInfo = (LoginInfo)session.getAttribute("loginInfo");
+    	
+    	SysUser user = sysUserMapper.selectByPrimaryKey(userId);
+    	BeanUtils.copyProperties(user, loginInfo);
+    	SysUserRole sysUserRole = sysUserRoleMapper.selectByUserId(userId);
+    	loginInfo.setRoleId(sysUserRole.getSysRoleId());
+        SysUnitUser unitUserByUser = sysUnitUserMapper.selectUnitUserByUserId(userId);
+        SysUnit currentUnit = sysUnitMapper.selectByPrimaryKey(unitUserByUser.getSysUnitId());
+        loginInfo.setUnitId(currentUnit.getId());
+        loginInfo.setUnitName(currentUnit.getUnitName());
+        SysFirstPage sysFirstPage  = sysFirstPageMapper.selectByRoleId(sysUserRole.getSysRoleId());
+        loginInfo.setFirstPage(sysFirstPage.getFirstPagePath());
+        session.setAttribute("loginInfo", loginInfo);
+	}
 	@Override
 	public SysUser selectByLoginName(String loginName) {
 		SysUser sysUser = null;
@@ -214,9 +232,7 @@ public class SysUserServiceImpl implements SysUserService {
     	Session session = subject.getSession();
     	LoginInfo loginInfo = (LoginInfo)session.getAttribute("loginInfo");
 		if(sysUser.getId().equals(loginInfo.getId())) {
-			SysUser user = sysUserMapper.selectByPrimaryKey(sysUser.getId());
-			BeanUtils.copyProperties(user, loginInfo);
-			session.setAttribute("loginInfo", loginInfo);
+			refreshLoginInfo(loginInfo.getId());
 		}
 		return Result.success();
 	}
@@ -240,11 +256,17 @@ public class SysUserServiceImpl implements SysUserService {
 			try {
 				for (int i = 0; i < length; i++) {
 					
-					//TODO建议把关联表得状态也修改为删除状态
 					SysUser sysUser = new SysUser();
 					sysUser.setId(Long.parseLong(split[i]));
 					sysUser.setStatus(0);
 					sysUserMapper.updateByPrimaryKeySelective(sysUser);
+	
+					Example example = new Example(SysUnitUser.class);
+					example.createCriteria().andEqualTo("sysUserId", split[i]);
+					SysUnitUser sysUnitUser = new SysUnitUser();
+					sysUnitUser.setStatus(0);
+					sysUnitUserMapper.updateByExampleSelective(sysUnitUser, example);
+					
 				}
 			} catch (Exception e) {
 				logger.error("删除用户出错",e);
@@ -319,9 +341,7 @@ public class SysUserServiceImpl implements SysUserService {
     	Session session = subject.getSession();
     	LoginInfo loginInfo = (LoginInfo)session.getAttribute("loginInfo");
 		if(sysUser.getId().equals(loginInfo.getId())) {
-			SysUser user = sysUserMapper.selectByPrimaryKey(sysUser.getId());
-			BeanUtils.copyProperties(user, loginInfo);
-			session.setAttribute("loginInfo", loginInfo);
+			refreshLoginInfo(loginInfo.getId());
 		}
 		return Result.success();
 	}
@@ -479,9 +499,7 @@ public class SysUserServiceImpl implements SysUserService {
     	Session session = subject.getSession();
     	LoginInfo loginInfo = (LoginInfo)session.getAttribute("loginInfo");
 		if(sysUser.getId().equals(loginInfo.getId())) {
-			SysUser user = sysUserMapper.selectByPrimaryKey(sysUser.getId());
-			BeanUtils.copyProperties(user, loginInfo);
-			session.setAttribute("loginInfo", loginInfo);
+			refreshLoginInfo(loginInfo.getId());
 		}
 		return Result.success();
 	}

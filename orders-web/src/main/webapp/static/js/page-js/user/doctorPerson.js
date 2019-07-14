@@ -1,4 +1,66 @@
-layui.use(['upload','laydate'], function(){
+layui.use(['upload','laydate','table'], function(){
+	var table = layui.table;
+	var dscTableIns = table.render({
+		    elem: '#myDiscount'
+		    ,width:798
+		    ,url:'discount/selectUnitDiscount'
+	    	,where:{
+	    		sysUnitId:$("#unitId").val()
+			}
+		    ,headers:{
+		    	"X-Csrf-Token":csrf_token
+		    }
+			,response: {
+			    statusName: 'code'
+			    ,statusCode: 200
+			    ,msgName: 'msg'
+			    ,countName: 'total'
+			    ,dataName: 'rows'
+			 } 
+		  	,limit:20
+		  	,limits:[20,30,50,100,200]
+		    ,title: '数据表'
+		    ,cols: [[
+
+		       {type: 'numbers', fixed: 'left'}
+		      ,{field:'discountName', title:'优惠券' ,templet:function(row){
+			    	 var option = '';
+  					  if(row.factoryName!='' && row.factoryName != null && row.factoryName!=undefined){
+  						  option = row.factoryName + "专用"+row.discountPrice+"元优惠券";
+  					  }else{
+  						  if(row.textureName!='' && row.textureName != null && row.textureName!=undefined){
+  							  option += row.textureName; 
+  						  }
+  						  if(row.brandName!='' && row.brandName != null && row.brandName!=undefined){
+  							  option += row.brandName;
+  						  }
+  						  if(option!=''){
+  							  option += "专用"+row.discountPrice+"元优惠券";
+  						  }
+  					  }
+  					  if(option!='' && row.discountType == 3){
+  						  option = '平台发布'+row.discountPrice+"元优惠券";
+  					  }
+  					  return option;
+ 			   }}
+		      ,{field:'discountPrice', title:'金额' ,width:80}
+		      ,{field:'discountType', title:'类型',width:100,templet:function(row){
+		    	  if(1 == row.discountType){
+		    		  return '工厂';
+		    	  }else if(2 == row.discountType){
+		    		return '产品材质';
+		    	  }else if(3 == row.discountType){
+		    		return '平台'; 
+		    	  }
+		       } }
+		      ,{field:'num', title:'数量' ,width:80}
+		      ,{field:'endTime', title:'到期时间' ,width:150,templet:function(row){
+			    	  return common_tool.timeDay(row.endTime);
+			      }}
+		    ]]
+      });
+	
+	
 	var upload = layui.upload;
 	var uploadInst = upload.render({
 	    elem: '.userFaceBtn'
@@ -72,6 +134,27 @@ layui.use(['upload','laydate'], function(){
 });
 
 $(function(){
+	getMyFactory();
+	selectCurrUnit();
+})
+
+function getMyFactory(){
+	$.ajax({
+		url: "unit/selectMyFactory"
+		,type:"get"
+		,dataType:"json"
+		,async:false
+		,success:function(data){
+			if(data!='' && data != null && data != undefined){
+				$("#myFactory").empty();
+				for (var i = 0; i < data.length; i++) {
+					$("#myFactory").append('<span class="layui-badge">'+data[i].unitName+'</span>');
+				}
+			}
+		}
+	})
+}
+function selectCurrUnit(){
 	$.ajax({
 		url: "unit/selectCurrUnit"
 		,type:"get"
@@ -91,7 +174,7 @@ $(function(){
 			}
 		}
 	})
-})
+}
 function getCountryByPid(form,divId,pid,huixian){
 	
 	switch (divId) {

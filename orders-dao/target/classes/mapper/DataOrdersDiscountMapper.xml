@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzy.dao.DataOrdersDiscountMapper" >
+  <resultMap id="BaseResultMap" type="com.yzy.entity.DataOrdersDiscount" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="orders_num" property="ordersNum" jdbcType="VARCHAR" />
+    <result column="data_discount_id" property="dataDiscountId" jdbcType="BIGINT" />
+    <result column="discount_price" property="discountPrice" jdbcType="DECIMAL" />
+    <result column="discount_type" property="discountType" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

@@ -3,6 +3,7 @@ package com.yzy.controller;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yzy.dao.SysUnitMapper;
 import com.yzy.entity.DataOrders;
 import com.yzy.entity.LoginInfo;
+import com.yzy.entity.SysUnit;
 import com.yzy.entity.SysUser;
 import com.yzy.entity.vo.OrdersVO;
 import com.yzy.service.OrdersService;
@@ -30,8 +33,44 @@ public class OrdersController extends BaseController{
 
 	@Autowired
 	private OrdersService ordersService;
+	@Autowired
+	private SysUnitMapper sysUnitMapper;
+	
+	@RequestMapping("toCreateOrders")
+	public String toCreateOrders(HttpServletRequest request,Long ordersId,Long patientId) {
+		if(ordersId != null ) {
+			request.setAttribute("ordersId", ordersId);
+		}
+		if(patientId != null ) {
+			request.setAttribute("patientId", patientId);
+		}
+		return "orders/createOrders";
+	}
 	
 	@RequestMapping(value = "createOrders", method = RequestMethod.POST)
+	@ResponseBody
+	public Result createOrders(@RequestParam Long dataPatientId,
+							   @RequestParam Integer baseCureId,
+							   @RequestParam String selectedTooths,
+							   @RequestParam String ordersAccessory,
+							   MultipartFile accessoryFile,
+							   @RequestParam Long receiveUnitId,
+							   @RequestParam String remarks) {
+		DataOrders dataOrders = new DataOrders();
+		Subject subject = SecurityUtils.getSubject();
+		LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");   //当前登录用户
+		dataOrders.setDataPatientId(dataPatientId);
+		dataOrders.setOrdersAccessory(ordersAccessory);
+		dataOrders.setReceiveUnitId(receiveUnitId);
+		dataOrders.setCreateUnitId(loginInfo.getUnitId());
+		dataOrders.setCreateUserId(loginInfo.getId());
+		dataOrders.setRemarks(remarks);
+		dataOrders.setStatus(1);
+		dataOrders.setCreateTime(new Date());
+		Result result = ordersService.createOrders(dataOrders,baseCureId,selectedTooths,accessoryFile);
+		return result;
+	}
+	/*@RequestMapping(value = "createOrders", method = RequestMethod.POST)
 	@ResponseBody
 	public Result createOrders(@RequestParam String patientName,
 							   @RequestParam Integer patientAge,
@@ -206,5 +245,5 @@ public class OrdersController extends BaseController{
 	@RequestMapping(value = "downloadAccessory", method = RequestMethod.GET)
 	public void downloadAccessory(Long ordersId,HttpServletResponse response) {
 		 ordersService.downloadAccessory( ordersId, response);
-	}
+	}*/
 }

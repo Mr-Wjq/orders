@@ -149,7 +149,7 @@ function ordersDetails(ordersId){
 						,btn:['下载扫描文件','关闭']
 						,content:"pdf/"+pdfPath
 						,yes:function(){
-							location.href="orders/downloadAccessory?ordersId="+ordersId;							
+							location.href=basePath + "orders/downloadAccessory?ordersId="+ordersId;							
 						}
 						,bt2:function(){
 

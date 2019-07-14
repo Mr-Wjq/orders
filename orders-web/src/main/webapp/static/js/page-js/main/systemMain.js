@@ -35,7 +35,7 @@ var sm = {
 $(function(){
 	$("#logout").click(function(){
 		layer.confirm('是否退出?', {icon: 3, title:'提示'}, function(index){
-			location.href="system/logout";
+			location.href=basePath + "system/logout";
 		})
 	})
 	$("#updatePwd").click(function(){

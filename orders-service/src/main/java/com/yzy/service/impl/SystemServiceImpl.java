@@ -33,8 +33,8 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public Result getPhoneCode(String phone) {
 		SysUser sysUser = sysUserMapper.selectUserByPhone(phone);
-		if(sysUser==null) {
-			return Result.error("该手机号未注册");
+		if(sysUser!=null) {
+			return Result.error("该手机号已注册");
 		}
 		DefaultProfile profile = DefaultProfile.getProfile("default", "LTAIh84lgCReJQJh", "iC4MgjTeoPIUZ2IpZvf0P5axpfLHxI");
         IAcsClient client = new DefaultAcsClient(profile);

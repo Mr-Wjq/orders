@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzy.dao.DataDiscountUnitMapper" >
+  <resultMap id="BaseResultMap" type="com.yzy.entity.DataDiscountUnit" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="data_discount_id" property="dataDiscountId" jdbcType="BIGINT" />
+    <result column="sys_unit_id" property="sysUnitId" jdbcType="BIGINT" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectDiscountByUnitId" resultType="com.yzy.entity.vo.DataDiscountUnitVO">
+  		     SELECT ddu.* 
+            ,dd.discount_name AS discount_name
+            ,dd.discount_price AS discount_price
+            ,dd.discount_type AS discount_type
+	     	,dd.factory_id
+            ,dd.base_product_id
+            ,bp.texture_name
+	     	,bp.brand_name
+	        ,su.unit_name as factory_name
+       FROM data_discount_unit ddu
+  LEFT JOIN data_discount dd ON ddu.data_discount_id = dd.id
+  left join  base_product bp on dd.base_product_id = bp.id
+  left join  sys_unit su on dd.factory_id = su.id
+  WHERE 
+  ddu.`sys_unit_id` = #{sysUnitId} 
+  AND ddu.`num` != 0 
+  AND ddu.`status` != 0
+  order by create_time desc
+  </select>
+  
+</mapper>
